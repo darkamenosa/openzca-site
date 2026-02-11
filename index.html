@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>openzca - Open-source Zalo CLI wrapper</title>
+  <meta name="description" content="openzca is a free, open-source CLI wrapper for zca-js with account, auth, message, group, friend, and profile commands.">
+  <link rel="canonical" href="https://openzca.com/">
+  <meta name="robots" content="index,follow">
+  <meta property="og:title" content="openzca - Open-source Zalo CLI wrapper">
+  <meta property="og:description" content="Free to use Zalo CLI wrapper with zca compatibility.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://openzca.com/">
+  <meta property="og:site_name" content="openzca">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="openzca - Open-source Zalo CLI wrapper">
+  <meta name="twitter:description" content="Free to use Zalo CLI wrapper with zca compatibility.">
+  <style>
+    :root {
+      --bg: #0a0f1a;
+      --panel: #121a2a;
+      --text: #e6edf7;
+      --muted: #9fb0ca;
+      --line: #2a3753;
+      --accent: #2f81f7;
+      --accent-2: #5bb4ff;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: ui-sans-serif, -apple-system, Segoe UI, Helvetica, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(47,129,247,.18), transparent 60%),
+        radial-gradient(900px 500px at -10% 10%, rgba(91,180,255,.12), transparent 50%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+    .hero {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .logo {
+      font-size: 14px;
+      color: var(--muted);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin: 0 0 8px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 5vw, 52px);
+      line-height: 1.05;
+    }
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      max-width: 70ch;
+    }
+    .grid {
+      display: grid;
+      gap: 16px;
+      margin-top: 22px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      background: var(--panel);
+    }
+    h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+    pre {
+      margin: 0;
+      padding: 10px 12px;
+      background: #0b1220;
+      border: 1px solid #1f2a40;
+      border-radius: 10px;
+      overflow-x: auto;
+      font-size: 14px;
+    }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      color: white;
+      background: linear-gradient(180deg, var(--accent-2), var(--accent));
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: 600;
+      border: 1px solid rgba(255,255,255,.18);
+    }
+    .btn.ghost {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--line);
+    }
+    .foot {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    @media (min-width: 760px) {
+      .grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "openzca",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Windows, macOS, Linux",
+    "url": "https://openzca.com/",
+    "codeRepository": "https://github.com/darkamenosa/openzca",
+    "description": "Free, open-source CLI wrapper for zca-js with zca-compatible command surface."
+  }
+  </script>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <p class="logo">open source cli</p>
+      <h1>openzca</h1>
+      <p class="sub">Free, open-source Zalo CLI wrapper built on <code>zca-js</code>. Use <code>openzca ...</code> (alias <code>zca ...</code>) for auth, messaging, groups, friends, and profile automation.</p>
+      <div class="actions">
+        <a class="btn" href="https://github.com/darkamenosa/openzca" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn ghost" href="https://www.npmjs.com/package/openzca" target="_blank" rel="noopener">npm package</a>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Install (npm)</h2>
+        <pre><code>npm i -g openzca
+openzca --help</code></pre>
+      </article>
+      <article class="card">
+        <h2>Install Script (macOS/Linux)</h2>
+        <pre><code>curl -fsSL https://get.openzca.dev/install.sh | bash</code></pre>
+      </article>
+      <article class="card">
+        <h2>Install Script (Windows PowerShell)</h2>
+        <pre><code>irm https://get.openzca.dev/install.ps1 | iex</code></pre>
+      </article>
+      <article class="card">
+        <h2>Quick start</h2>
+        <pre><code>openzca auth login
+openzca auth status
+openzca msg send &lt;userId&gt; "hello"</code></pre>
+      </article>
+    </section>
+
+    <p class="foot">Primary domain: <code>openzca.com</code>. Secondary domain can point/redirect to the same site.</p>
+  </main>
+</body>
+</html>
