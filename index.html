@@ -1,124 +1,434 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>openzca - Open-source Zalo CLI wrapper</title>
-  <meta name="description" content="openzca is a free, open-source CLI wrapper for zca-js with account, auth, message, group, friend, and profile commands.">
+  <title>openzca - Free, Open-Source Zalo CLI for Research &amp; Personal Use</title>
+  <meta name="description" content="openzca is a free, open-source CLI tool for Zalo built on zca-js. Send messages, manage groups, automate workflows, all from your terminal. For educational and personal research purposes.">
+  <meta name="theme-color" content="#0F172A">
   <link rel="canonical" href="https://openzca.com/">
   <meta name="robots" content="index,follow">
-  <meta property="og:title" content="openzca - Open-source Zalo CLI wrapper">
-  <meta property="og:description" content="Free to use Zalo CLI wrapper with zca compatibility.">
+  <meta property="og:title" content="openzca - Free, Open-Source Zalo CLI">
+  <meta property="og:description" content="Automate Zalo from your terminal. Open source, MIT licensed. For educational and personal research purposes.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://openzca.com/">
   <meta property="og:site_name" content="openzca">
+  <meta property="og:image" content="https://openzca.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="openzca - Open-source Zalo CLI wrapper">
-  <meta name="twitter:description" content="Free to use Zalo CLI wrapper with zca compatibility.">
+  <meta name="twitter:title" content="openzca - Free, Open-Source Zalo CLI">
+  <meta name="twitter:description" content="Automate Zalo from your terminal. Open source, MIT licensed.">
+  <meta name="twitter:image" content="https://openzca.com/og-image.png">
+  <link rel="alternate" hreflang="en" href="https://openzca.com/">
+  <link rel="alternate" hreflang="vi" href="https://openzca.com/">
+  <link rel="alternate" hreflang="x-default" href="https://openzca.com/">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%3E_</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0a0f1a;
-      --panel: #121a2a;
-      --text: #e6edf7;
-      --muted: #9fb0ca;
-      --line: #2a3753;
-      --accent: #2f81f7;
-      --accent-2: #5bb4ff;
+      --bg: #0f172a;
+      --bg-alt: #1e293b;
+      --panel: #1e293b;
+      --panel-hover: #334155;
+      --text: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --border: #334155;
+      --accent: #38bdf8;
+      --accent-2: #818cf8;
+      --accent-glow: rgba(56, 189, 248, 0.15);
+      --green: #4ade80;
+      --yellow: #facc15;
+      --font: 'IBM Plex Sans', ui-sans-serif, -apple-system, system-ui, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
     body {
-      font-family: ui-sans-serif, -apple-system, Segoe UI, Helvetica, Arial, sans-serif;
-      background:
-        radial-gradient(1200px 600px at 80% -10%, rgba(47,129,247,.18), transparent 60%),
-        radial-gradient(900px 500px at -10% 10%, rgba(91,180,255,.12), transparent 50%),
-        var(--bg);
+      font-family: var(--font);
+      background: var(--bg);
       color: var(--text);
-      line-height: 1.5;
+      line-height: 1.6;
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
-    .wrap {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 32px 20px 48px;
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
     }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 24px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      font-weight: 700; font-size: 20px; color: var(--text);
+      text-decoration: none; display: flex; align-items: center; gap: 8px;
+    }
+    .nav-brand span { color: var(--accent); }
+    .nav-links {
+      display: flex; align-items: center; gap: 24px; list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-secondary); text-decoration: none;
+      font-size: 14px; font-weight: 500; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .lang-toggle {
+      display: flex; background: var(--bg-alt);
+      border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+    }
+    .lang-btn {
+      padding: 6px 12px; font-size: 13px; font-weight: 600;
+      border: none; background: transparent; color: var(--text-secondary);
+      cursor: pointer; transition: all 0.2s; font-family: var(--font);
+    }
+    .lang-btn.active { background: var(--accent); color: var(--bg); }
+    .nav-mobile-toggle {
+      display: none; background: none; border: none;
+      color: var(--text); cursor: pointer; padding: 4px;
+    }
+    .nav-mobile-toggle svg { width: 24px; height: 24px; }
+
+    /* ── HERO ── */
     .hero {
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-      border-radius: 16px;
-      padding: 28px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      padding: 140px 24px 80px; text-align: center;
+      position: relative; overflow: hidden;
     }
-    .logo {
-      font-size: 14px;
-      color: var(--muted);
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      margin: 0 0 8px;
+    .hero::before {
+      content: ''; position: absolute; top: -200px; left: 50%;
+      transform: translateX(-50%); width: 800px; height: 600px;
+      background: radial-gradient(ellipse, rgba(56, 189, 248, 0.12), transparent 70%);
+      pointer-events: none;
     }
+    .hero::after {
+      content: ''; position: absolute; top: 0; right: 0;
+      width: 500px; height: 400px;
+      background: radial-gradient(ellipse, rgba(56, 189, 248, 0.06), transparent 70%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      max-width: 800px; margin: 0 auto; position: relative; z-index: 1;
+    }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 16px; border-radius: 999px; font-size: 13px; font-weight: 600;
+      background: rgba(74, 222, 128, 0.1); color: var(--green);
+      border: 1px solid rgba(74, 222, 128, 0.2); margin-bottom: 24px;
+    }
+    .badge svg { width: 16px; height: 16px; }
     h1 {
-      margin: 0 0 8px;
-      font-size: clamp(30px, 5vw, 52px);
-      line-height: 1.05;
+      font-size: clamp(36px, 6vw, 64px); font-weight: 700;
+      line-height: 1.1; margin-bottom: 20px; letter-spacing: -0.02em;
     }
-    .sub {
-      margin: 0;
-      color: var(--muted);
-      max-width: 70ch;
+    h1 .gradient {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-    .grid {
-      display: grid;
-      gap: 16px;
-      margin-top: 22px;
+    .hero-desc {
+      font-size: 18px; color: var(--text-secondary);
+      max-width: 600px; margin: 0 auto 32px; line-height: 1.7;
     }
-    .card {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 14px;
-      background: var(--panel);
-    }
-    h2 {
-      margin: 0 0 8px;
-      font-size: 18px;
-    }
-    pre {
-      margin: 0;
-      padding: 10px 12px;
-      background: #0b1220;
-      border: 1px solid #1f2a40;
-      border-radius: 10px;
-      overflow-x: auto;
-      font-size: 14px;
-    }
-    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-    .actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 18px;
+    .hero-actions {
+      display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;
     }
     .btn {
-      display: inline-block;
-      text-decoration: none;
-      color: white;
-      background: linear-gradient(180deg, var(--accent-2), var(--accent));
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-weight: 600;
-      border: 1px solid rgba(255,255,255,.18);
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 10px; font-size: 15px; font-weight: 600;
+      text-decoration: none; transition: all 0.2s;
+      font-family: var(--font); cursor: pointer; border: none;
     }
-    .btn.ghost {
-      background: transparent;
-      color: var(--text);
-      border-color: var(--line);
+    .btn-primary {
+      background: var(--accent);
+      color: #0f172a; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.25);
     }
-    .foot {
-      margin-top: 22px;
-      color: var(--muted);
-      font-size: 13px;
+    .btn-primary:hover {
+      background: #5ccbfa;
+      box-shadow: 0 6px 25px rgba(56, 189, 248, 0.35); transform: translateY(-1px);
     }
-    @media (min-width: 760px) {
-      .grid { grid-template-columns: 1fr 1fr; }
+    .btn-outline {
+      background: transparent; color: var(--text); border: 1px solid var(--border);
+    }
+    .btn-outline:hover { background: var(--panel); border-color: var(--text-secondary); }
+    .btn svg { width: 18px; height: 18px; }
+
+    /* ── TERMINAL ── */
+    .terminal-preview {
+      max-width: 640px; margin: 48px auto 0; border-radius: 12px;
+      overflow: hidden; border: 1px solid var(--border);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+    .terminal-bar {
+      background: #1a1f2e; padding: 12px 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .terminal-dot.red { background: #ff5f57; }
+    .terminal-dot.yellow { background: #febc2e; }
+    .terminal-dot.green { background: #28c840; }
+    .terminal-body {
+      background: #0b1120; padding: 20px; font-family: var(--mono);
+      font-size: 14px; line-height: 1.8; text-align: left;
+    }
+    .terminal-body .prompt { color: var(--green); }
+    .terminal-body .cmd { color: var(--text); }
+    .terminal-body .comment { color: #475569; }
+    .terminal-body .output { color: var(--text-secondary); }
+
+    /* ── SECTIONS ── */
+    .section { padding: 80px 24px; }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-label {
+      font-size: 14px; font-weight: 600; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 40px); font-weight: 700;
+      margin-bottom: 16px; letter-spacing: -0.01em;
+    }
+    .section-desc {
+      font-size: 16px; color: var(--text-secondary);
+      max-width: 600px; margin: 0 auto;
+    }
+
+    /* ── FEATURES ── */
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;
+    }
+    .feature-card {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 14px; padding: 28px; transition: all 0.3s;
+    }
+    .feature-card:hover {
+      border-color: var(--accent); background: var(--panel-hover);
+      transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+    .feature-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px; font-size: 22px; background: var(--accent-glow);
+    }
+    .feature-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+    .feature-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+    /* ── INSTALL ── */
+    .install-section {
+      background: linear-gradient(180deg, transparent, rgba(30, 41, 59, 0.5), transparent);
+    }
+    .install-tabs {
+      display: flex; justify-content: center; gap: 8px; margin-bottom: 32px;
+    }
+    .install-tab {
+      padding: 8px 20px; border-radius: 8px; font-size: 14px; font-weight: 500;
+      background: transparent; color: var(--text-secondary);
+      border: 1px solid var(--border); cursor: pointer;
+      transition: all 0.2s; font-family: var(--font);
+    }
+    .install-tab.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+    .install-panel { display: none; max-width: 640px; margin: 0 auto; }
+    .install-panel.active { display: block; }
+    .code-block {
+      background: #0b1120; border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .code-header {
+      background: #1a1f2e; padding: 10px 16px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 13px; color: var(--text-secondary);
+    }
+    .copy-btn {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--text-secondary); padding: 4px 10px; border-radius: 6px;
+      font-size: 12px; cursor: pointer; font-family: var(--font); transition: all 0.2s;
+    }
+    .copy-btn:hover { color: var(--text); border-color: var(--text-secondary); }
+    .code-body {
+      padding: 16px 20px; font-family: var(--mono);
+      font-size: 14px; line-height: 1.8; overflow-x: auto;
+    }
+    .code-body code { font-family: var(--mono); }
+
+    /* ── STEPS ── */
+    .steps { max-width: 700px; margin: 0 auto; }
+    .step { display: flex; gap: 24px; padding: 24px 0; position: relative; }
+    .step:not(:last-child)::after {
+      content: ''; position: absolute; left: 23px; top: 72px; bottom: 0;
+      width: 2px; background: var(--border);
+    }
+    .step-num {
+      width: 48px; height: 48px; min-width: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 700;
+      background: var(--accent); color: var(--bg);
+    }
+    .step-content h3 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+    .step-content p { color: var(--text-secondary); font-size: 15px; }
+    .step-content code {
+      font-family: var(--mono); background: rgba(56, 189, 248, 0.1);
+      padding: 2px 8px; border-radius: 4px; font-size: 13px; color: var(--accent);
+    }
+
+    /* ── INTEGRATION ── */
+    .integration-section {
+      background: linear-gradient(180deg, transparent, rgba(56, 189, 248, 0.03), transparent);
+    }
+    .integration-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+      align-items: center; max-width: 1000px; margin: 0 auto;
+    }
+    .integration-text h3 { font-size: 22px; font-weight: 700; margin-bottom: 12px; }
+    .integration-text p {
+      color: var(--text-secondary); font-size: 15px; line-height: 1.7; margin-bottom: 16px;
+    }
+    .integration-text .tag {
+      display: inline-block; padding: 4px 12px; border-radius: 6px;
+      font-size: 12px; font-weight: 600; margin-right: 6px; margin-bottom: 6px;
+    }
+    .tag-openclaw { background: rgba(56, 189, 248, 0.15); color: var(--accent); }
+    .tag-zalouser { background: rgba(56, 189, 248, 0.15); color: var(--accent); }
+    .tag-free { background: rgba(74, 222, 128, 0.15); color: var(--green); }
+    .video-wrapper {
+      position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+      border-radius: 12px; border: 1px solid var(--border);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+    .video-wrapper iframe {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
+    }
+    @media (max-width: 768px) {
+      .integration-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── FAQ ── */
+    .faq-list { max-width: 700px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-question {
+      width: 100%; display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 0; background: none; border: none; color: var(--text);
+      font-size: 16px; font-weight: 600; text-align: left;
+      cursor: pointer; font-family: var(--font); transition: color 0.2s;
+    }
+    .faq-question:hover { color: var(--accent); }
+    .faq-arrow {
+      width: 20px; height: 20px; transition: transform 0.3s;
+      color: var(--text-secondary); flex-shrink: 0; margin-left: 16px;
+    }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+    .faq-answer-inner {
+      padding: 0 0 20px; color: var(--text-secondary);
+      font-size: 15px; line-height: 1.7;
+    }
+
+    /* ── DISCLAIMER ── */
+    .disclaimer-section {
+      background: linear-gradient(180deg, transparent, rgba(250, 204, 21, 0.03), transparent);
+    }
+    .disclaimer-box {
+      max-width: 800px; margin: 0 auto;
+      background: rgba(250, 204, 21, 0.05); border: 1px solid rgba(250, 204, 21, 0.15);
+      border-radius: 14px; padding: 32px;
+    }
+    .disclaimer-box h3 {
+      font-size: 18px; font-weight: 600; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px; color: var(--yellow);
+    }
+    .disclaimer-box ul { list-style: none; padding: 0; }
+    .disclaimer-box li {
+      padding: 8px 0; padding-left: 20px; position: relative;
+      color: var(--text-secondary); font-size: 14px; line-height: 1.7;
+    }
+    .disclaimer-box li::before {
+      content: ''; position: absolute; left: 0; top: 16px;
+      width: 6px; height: 6px; border-radius: 50%; background: rgba(250, 204, 21, 0.5);
+    }
+    .disclaimer-box .em { font-weight: 700; color: var(--text); }
+    .disclaimer-box a { color: var(--accent); text-decoration: none; }
+    .disclaimer-box a:hover { text-decoration: underline; }
+
+    /* ── OSS BANNER ── */
+    .oss-banner { text-align: center; padding: 80px 24px; position: relative; }
+    .oss-banner::before {
+      content: ''; position: absolute; top: 0; left: 50%;
+      transform: translateX(-50%); width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(74, 222, 128, 0.08), transparent 70%);
+      pointer-events: none;
+    }
+    .oss-inner { position: relative; z-index: 1; }
+    .oss-banner h2 {
+      font-size: clamp(28px, 4vw, 40px); font-weight: 700; margin-bottom: 16px;
+    }
+    .oss-banner p {
+      color: var(--text-secondary); font-size: 16px;
+      max-width: 500px; margin: 0 auto 32px;
+    }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 40px 24px; }
+    .footer-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: flex-start;
+      flex-wrap: wrap; gap: 32px;
+    }
+    .footer-brand { font-weight: 700; font-size: 18px; margin-bottom: 8px; }
+    .footer-brand span { color: var(--accent); }
+    .footer-note {
+      color: var(--text-secondary); font-size: 13px;
+      max-width: 320px; line-height: 1.6;
+    }
+    .footer-col h4 { font-size: 14px; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+    .footer-col a {
+      display: block; color: var(--text-secondary); text-decoration: none;
+      font-size: 14px; margin-bottom: 8px; transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--text); }
+    .footer-bottom {
+      max-width: 1200px; margin: 24px auto 0; padding-top: 24px;
+      border-top: 1px solid var(--border); font-size: 13px;
+      color: var(--text-secondary); line-height: 1.7;
+    }
+    .footer-bottom-row {
+      display: flex; justify-content: space-between; flex-wrap: wrap;
+      gap: 16px; margin-bottom: 12px;
+    }
+    .footer-legal { font-size: 12px; color: #94a3b8; line-height: 1.6; max-width: 800px; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column; position: absolute;
+        top: 64px; left: 0; right: 0;
+        background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px);
+        padding: 16px 24px; border-bottom: 1px solid var(--border); gap: 16px;
+      }
+      .nav-mobile-toggle { display: block; }
+      .hero { padding: 120px 20px 60px; }
+      .section { padding: 60px 20px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .install-tabs { flex-wrap: wrap; }
+      .step { gap: 16px; }
+      .footer-inner { flex-direction: column; }
+      .disclaimer-box { padding: 24px; }
+    }
+
+    /* ── ANIMATIONS ── */
+    @media (prefers-reduced-motion: no-preference) {
+      .feature-card, .step, .faq-item, .integration-grid {
+        opacity: 0; transform: translateY(20px);
+        transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s, background 0.3s, box-shadow 0.3s;
+      }
+      .feature-card.visible, .step.visible, .faq-item.visible, .integration-grid.visible {
+        opacity: 1; transform: translateY(0);
+      }
     }
   </style>
   <script type="application/ld+json">
@@ -130,45 +440,742 @@
     "operatingSystem": "Windows, macOS, Linux",
     "url": "https://openzca.com/",
     "codeRepository": "https://github.com/darkamenosa/openzca",
-    "description": "Free, open-source CLI wrapper for zca-js with zca-compatible command surface."
+    "description": "Free, open-source CLI tool for Zalo built on zca-js. For educational and personal research purposes.",
+    "license": "https://opensource.org/licenses/MIT",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is openzca really free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, 100% free and open source under the MIT license. No license keys, no subscriptions, no feature limits."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is openzca an official Zalo product?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. openzca is an independent, unofficial, third-party open-source project. It is not affiliated with Zalo or VNG Corporation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How is openzca different from zca-cli?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "zca-cli requires a paid license with a multi-step activation process. openzca is 100% free, open source (MIT license), and works immediately after install with no license keys or device limits."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are the system requirements?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Node.js 18 or higher is required. openzca runs on macOS, Linux, and Windows. No additional dependencies needed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I manage multiple Zalo accounts?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes! openzca has a built-in profile system. Create named profiles for each account and switch between them with a single command."
+        }
+      }
+    ]
   }
   </script>
 </head>
 <body>
-  <main class="wrap">
-    <section class="hero">
-      <p class="logo">open source cli</p>
-      <h1>openzca</h1>
-      <p class="sub">Free, open-source Zalo CLI wrapper built on <code>zca-js</code>. Use <code>openzca ...</code> (alias <code>zca ...</code>) for auth, messaging, groups, friends, and profile automation.</p>
-      <div class="actions">
-        <a class="btn" href="https://github.com/darkamenosa/openzca" target="_blank" rel="noopener">GitHub</a>
-        <a class="btn ghost" href="https://www.npmjs.com/package/openzca" target="_blank" rel="noopener">npm package</a>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-brand"><span>&gt;_</span> openzca</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#features" data-i18n="nav.features">Features</a></li>
+      <li><a href="#install" data-i18n="nav.install">Installation</a></li>
+      <li><a href="#how" data-i18n="nav.how">How It Works</a></li>
+      <li><a href="#openclaw" data-i18n="nav.openclaw">OpenClaw</a></li>
+      <li><a href="#faq" data-i18n="nav.faq">FAQ</a></li>
+      <li><a href="#disclaimer" data-i18n="nav.disclaimer">Disclaimer</a></li>
+      <li><a href="https://github.com/darkamenosa/openzca" target="_blank" rel="noopener">GitHub</a></li>
+      <li>
+        <div class="lang-toggle">
+          <button class="lang-btn active" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="vi">VI</button>
+        </div>
+      </li>
+    </ul>
+    <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="badge">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>
+      <span data-i18n="hero.badge">100% Free &amp; Open Source</span>
+    </div>
+    <h1>
+      <span data-i18n="hero.title1">The Free Zalo CLI</span><br>
+      <span class="gradient" data-i18n="hero.title2">for Developers</span>
+    </h1>
+    <p class="hero-desc" data-i18n="hero.desc">Send messages, manage groups, and listen for real-time events, all from your terminal. No license keys, no subscriptions, no device limits. Open source, MIT licensed, forever free.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#install">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+        <span data-i18n="hero.cta1">Get Started</span>
+      </a>
+      <a class="btn btn-outline" href="https://github.com/darkamenosa/openzca" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </div>
+    <div class="terminal-preview">
+      <div class="terminal-bar">
+        <div class="terminal-dot red"></div>
+        <div class="terminal-dot yellow"></div>
+        <div class="terminal-dot green"></div>
       </div>
-    </section>
+      <div class="terminal-body">
+        <div><span class="comment"># Install openzca</span></div>
+        <div><span class="prompt">$ </span><span class="cmd">npm i -g openzca</span></div>
+        <div>&nbsp;</div>
+        <div><span class="comment"># Login with QR code</span></div>
+        <div><span class="prompt">$ </span><span class="cmd">openzca auth login</span></div>
+        <div><span class="output">Scan the QR code with your Zalo app...</span></div>
+        <div><span class="output" style="color:var(--green)">Logged in successfully!</span></div>
+        <div>&nbsp;</div>
+        <div><span class="comment"># Send a message</span></div>
+        <div><span class="prompt">$ </span><span class="cmd">openzca msg send 123456 "Hello from CLI!"</span></div>
+        <div><span class="output" style="color:var(--green)">Message sent.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <section class="grid">
-      <article class="card">
-        <h2>Install (npm)</h2>
-        <pre><code>npm install -g openzca
-openzca --help</code></pre>
-      </article>
-      <article class="card">
-        <h2>Install Script (macOS/Linux)</h2>
-        <pre><code>curl -fsSL https://openzca.com/install.sh | bash</code></pre>
-      </article>
-      <article class="card">
-        <h2>Install Script (Windows PowerShell)</h2>
-        <pre><code>irm https://openzca.com/install.ps1 | iex</code></pre>
-      </article>
-      <article class="card">
-        <h2>Quick start</h2>
-        <pre><code>openzca auth login
-openzca auth status
-openzca msg send &lt;userId&gt; "hello"</code></pre>
-      </article>
-    </section>
+<!-- ═══ FEATURES ═══ -->
+<section class="section" id="features">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label" data-i18n="features.label">Features</div>
+      <h2 class="section-title" data-i18n="features.title">Full-featured Zalo CLI. No license required.</h2>
+      <p class="section-desc" data-i18n="features.desc">Every command you need for Zalo automation, from messaging to group management. All free, all open source.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">&#128274;</div>
+        <h3 data-i18n="f.qr.title">QR Code Login</h3>
+        <p data-i18n="f.qr.desc">Scan to authenticate. Inline QR rendering in Ghostty, Kitty, WezTerm, and iTerm2. ASCII fallback for other terminals.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#128101;</div>
+        <h3 data-i18n="f.multi.title">Multi-Account</h3>
+        <p data-i18n="f.multi.desc">Manage multiple Zalo accounts with named profiles. Switch instantly between personal, work, and bot accounts.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#128172;</div>
+        <h3 data-i18n="f.msg.title">Rich Messaging</h3>
+        <p data-i18n="f.msg.desc">Send text, images, videos, voice messages, stickers, contact cards, links, and reactions to individuals or groups.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#9889;</div>
+        <h3 data-i18n="f.listen.title">Real-time Listener</h3>
+        <p data-i18n="f.listen.desc">WebSocket-powered message listener with webhook integration, auto-reply echo mode, and prefix filtering.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#128119;</div>
+        <h3 data-i18n="f.group.title">Group Management</h3>
+        <p data-i18n="f.group.desc">Create and configure groups, manage members and deputies, handle invite links and join requests.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#128100;</div>
+        <h3 data-i18n="f.friend.title">Friend Management</h3>
+        <p data-i18n="f.friend.desc">Search users by phone or username, send friend requests, manage aliases, block or unblock contacts.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#128736;</div>
+        <h3 data-i18n="f.profile.title">Profile &amp; Status</h3>
+        <p data-i18n="f.profile.desc">View and update your Zalo profile, change avatars, set online status, and check last-seen times.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#127793;</div>
+        <h3 data-i18n="f.free.title">Free &amp; Open Source</h3>
+        <p data-i18n="f.free.desc">MIT licensed. No license keys, no activation codes, no subscriptions, no device limits. Forever free.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <p class="foot">Primary domain: <code>openzca.com</code>. Secondary domain can point/redirect to the same site.</p>
-  </main>
+<!-- ═══ INSTALL ═══ -->
+<section class="section install-section" id="install">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label" data-i18n="install.label">Installation</div>
+      <h2 class="section-title" data-i18n="install.title">Up and running in seconds</h2>
+      <p class="section-desc" data-i18n="install.desc">Choose your preferred installation method. Requires Node.js 18 or higher.</p>
+    </div>
+    <div class="install-tabs">
+      <button class="install-tab active" data-tab="npm">npm</button>
+      <button class="install-tab" data-tab="macos">macOS / Linux</button>
+      <button class="install-tab" data-tab="windows">Windows</button>
+      <button class="install-tab" data-tab="npx">npx</button>
+    </div>
+    <div class="install-panel active" data-panel="npm">
+      <div class="code-block">
+        <div class="code-header"><span>Terminal</span><button class="copy-btn" data-copy="npm i -g openzca">Copy</button></div>
+        <div class="code-body"><code><span style="color:var(--green)">$</span> npm i -g openzca</code></div>
+      </div>
+    </div>
+    <div class="install-panel" data-panel="macos">
+      <div class="code-block">
+        <div class="code-header"><span>Terminal</span><button class="copy-btn" data-copy="curl -fsSL https://openzca.com/install.sh | bash">Copy</button></div>
+        <div class="code-body"><code><span style="color:var(--green)">$</span> curl -fsSL https://openzca.com/install.sh | bash</code></div>
+      </div>
+    </div>
+    <div class="install-panel" data-panel="windows">
+      <div class="code-block">
+        <div class="code-header"><span>PowerShell</span><button class="copy-btn" data-copy="irm https://openzca.com/install.ps1 | iex">Copy</button></div>
+        <div class="code-body"><code><span style="color:var(--green)">PS&gt;</span> irm https://openzca.com/install.ps1 | iex</code></div>
+      </div>
+    </div>
+    <div class="install-panel" data-panel="npx">
+      <div class="code-block">
+        <div class="code-header"><span>Terminal</span><button class="copy-btn" data-copy="npx openzca --help">Copy</button></div>
+        <div class="code-body">
+          <code><span style="color:var(--green)">$</span> npx openzca --help</code><br>
+          <code style="color:var(--text-secondary)"># Run without installing globally</code>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<section class="section" id="how">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label" data-i18n="how.label">How It Works</div>
+      <h2 class="section-title" data-i18n="how.title">Start automating in 5 steps. No purchase required.</h2>
+      <p class="section-desc" data-i18n="how.desc">Install, login, and start sending, all in under a minute.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3 data-i18n="step1.title">Install openzca</h3>
+          <p data-i18n="step1.desc">Install globally via npm or use the one-line installer script. Requires Node.js 18+.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3 data-i18n="step2.title">Login with QR code</h3>
+          <p><span data-i18n="step2.desc">Run</span> <code>openzca auth login</code> <span data-i18n="step2.desc2">and scan the QR code with your Zalo app. Done.</span></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3 data-i18n="step3.title">Send your first message</h3>
+          <p><span data-i18n="step3.desc">Use</span> <code>openzca msg send &lt;userId&gt; "Hello!"</code> <span data-i18n="step3.desc2">to send text, images, videos, and more.</span></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h3 data-i18n="step4.title">Set up real-time listener</h3>
+          <p><span data-i18n="step4.desc">Run</span> <code>openzca listen --webhook URL</code> <span data-i18n="step4.desc2">to receive messages in real-time via webhook.</span></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h3 data-i18n="step5.title">Manage multiple accounts</h3>
+          <p><span data-i18n="step5.desc">Create profiles with</span> <code>openzca account add work</code> <span data-i18n="step5.desc2">and switch between them instantly.</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ OPENCLAW INTEGRATION ═══ -->
+<section class="section integration-section" id="openclaw">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label" data-i18n="oc.label">Integration</div>
+      <h2 class="section-title" data-i18n="oc.title">Use with OpenClaw</h2>
+      <p class="section-desc" data-i18n="oc.desc">openzca powers the ZaloUser plugin in OpenClaw, giving you AI-driven Zalo automation out of the box.</p>
+    </div>
+    <div class="integration-grid">
+      <div class="integration-text">
+        <div style="margin-bottom:16px">
+          <span class="tag tag-openclaw">OpenClaw</span>
+          <span class="tag tag-zalouser">ZaloUser Plugin</span>
+          <span class="tag tag-free">Free</span>
+        </div>
+        <h3 data-i18n="oc.sub">A smarter way to automate Zalo</h3>
+        <p data-i18n="oc.p1">OpenClaw is an AI agent platform that connects to multiple messaging services. With the ZaloUser plugin, it uses openzca under the hood to send and receive Zalo messages automatically.</p>
+        <p data-i18n="oc.p2">If you prefer a visual, no-code approach instead of the CLI, OpenClaw + ZaloUser is a great alternative to zca-cli. Just install the plugin, scan the QR code, and let your AI agent handle the rest.</p>
+        <p data-i18n="oc.p3">Watch the video to see how it works in action.</p>
+      </div>
+      <div>
+        <div class="video-wrapper">
+          <iframe src="https://www.youtube.com/embed/5wB4V9RtOmc?rel=0" title="OpenClaw ZaloUser Plugin Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section class="section" id="faq">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label" data-i18n="faq.label">FAQ</div>
+      <h2 class="section-title" data-i18n="faq.title">Frequently Asked Questions</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question">
+          <span data-i18n="faq.q1">Is openzca really free?</span>
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq.a1">Yes, 100% free and open source under the MIT license. No license keys, no subscriptions, no feature limits. You can use it for personal projects and research without any cost.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span data-i18n="faq.q2">Is openzca an official Zalo product?</span>
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq.a2">No. openzca is an independent, unofficial, third-party open-source project. It is not affiliated with, endorsed by, sponsored by, or associated with Zalo or VNG Corporation in any way. It uses the publicly available zca-js library for API interactions. Using automation tools may violate Zalo's Terms of Service and could result in account restrictions. Use at your own risk and responsibility.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span data-i18n="faq.q3">What is this tool intended for?</span>
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq.a3">openzca is intended for educational purposes, personal research, and legitimate personal automation. It provides a CLI interface to explore Zalo's messaging capabilities from a developer's perspective. Users are solely responsible for ensuring their use complies with all applicable laws and Zalo's Terms of Service.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span data-i18n="faq.q4">Which terminals support inline QR codes?</span>
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq.a4">Ghostty, Kitty, WezTerm, and iTerm2 support inline QR rendering via the Kitty Graphics Protocol or iTerm2 inline images. All other terminals get an ASCII QR fallback, or you can save the QR to a file and open it manually.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span data-i18n="faq.q5">Can I manage multiple Zalo accounts?</span>
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq.a5">Yes! openzca has a built-in profile system. Create named profiles for each account, switch between them with a single command, or specify a profile per command with the --profile flag.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span data-i18n="faq.q6">What are the system requirements?</span>
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq.a6">Node.js 18 or higher is required. openzca runs on macOS, Linux, and Windows. No additional dependencies needed, everything is installed via npm.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span data-i18n="faq.q7">How is openzca different from zca-cli?</span>
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq.a7">zca-cli requires a paid license with a multi-step activation process (support codes, bank transfer, device binding). openzca is 100% free, open source (MIT license), and works immediately after install, no license keys, no activation, no device limits. Same core features: messaging, groups, friends, profiles, and real-time listening. The source code is publicly available on GitHub for full transparency and community contributions.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DISCLAIMER ═══ -->
+<section class="section disclaimer-section" id="disclaimer">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label" data-i18n="disc.label">Disclaimer</div>
+      <h2 class="section-title" data-i18n="disc.title">Important Legal Notice</h2>
+    </div>
+    <div class="disclaimer-box">
+      <h3>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span data-i18n="disc.heading">Disclaimer &amp; Legal Notice</span>
+      </h3>
+      <ul>
+        <li><span data-i18n="disc.1a">openzca is an independent, unofficial, third-party open-source project. It is</span> <span class="em" data-i18n="disc.1b">not affiliated with, endorsed by, sponsored by, or associated with Zalo or VNG Corporation</span> <span data-i18n="disc.1c">in any way.</span></li>
+        <li data-i18n="disc.2">"Zalo" is a registered trademark of VNG Corporation. All trademarks, service marks, and trade names referenced herein are the property of their respective owners and are used solely for identification and descriptive purposes.</li>
+        <li><span data-i18n="disc.3a">This software is provided for</span> <span class="em" data-i18n="disc.3b">educational purposes, personal research, and legitimate personal automation</span> <span data-i18n="disc.3c">only. It is intended as a developer tool for exploring messaging APIs from a research perspective.</span></li>
+        <li><span data-i18n="disc.4a">openzca is built on the publicly available</span> <a href="https://github.com/nicenathapong/zca-js" target="_blank" rel="noopener">zca-js</a> <span data-i18n="disc.4b">open-source library (MIT license). No proprietary code belonging to Zalo or VNG Corporation is included in this project.</span></li>
+        <li><span data-i18n="disc.5a">Using automation tools may violate Zalo's Terms of Service and could result in account suspension or restrictions.</span> <span class="em" data-i18n="disc.5b">Users are solely responsible</span> <span data-i18n="disc.5c">for ensuring their use complies with all applicable laws, regulations, and Zalo's Terms of Service.</span></li>
+        <li data-i18n="disc.6">This software is provided "as is", without warranty of any kind, express or implied. The authors and contributors shall not be held liable for any damages arising from the use of this software.</li>
+        <li data-i18n="disc.7">By using openzca, you acknowledge that you understand and accept these terms and that you use this tool at your own risk and responsibility.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ OSS BANNER ═══ -->
+<section class="oss-banner">
+  <div class="oss-inner">
+    <h2 data-i18n="oss.title">Open source, community driven</h2>
+    <p data-i18n="oss.desc">Join the community. Contribute on GitHub, report issues, or just star the repo.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="https://github.com/darkamenosa/openzca" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        <span data-i18n="oss.cta1">Star on GitHub</span>
+      </a>
+      <a class="btn btn-outline" href="https://www.npmjs.com/package/openzca" target="_blank" rel="noopener">
+        <span data-i18n="oss.cta2">View on npm</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand"><span>&gt;_</span> openzca</div>
+      <p class="footer-note" data-i18n="footer.note">Free, open-source Zalo CLI for educational and personal research purposes. Not affiliated with Zalo or VNG Corporation.</p>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer.resources">Resources</h4>
+      <a href="https://github.com/darkamenosa/openzca" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.npmjs.com/package/openzca" target="_blank" rel="noopener">npm</a>
+      <a href="https://github.com/darkamenosa/openzca/issues" target="_blank" rel="noopener" data-i18n="footer.issues">Report Issues</a>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer.community">Community</h4>
+      <a href="https://github.com/darkamenosa/openzca/issues" target="_blank" rel="noopener" data-i18n="footer.discussions">Issues</a>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer.legal_title">Legal</h4>
+      <a href="/terms.html" data-i18n="footer.terms">Terms of Service</a>
+      <a href="/privacy.html" data-i18n="footer.privacy">Privacy Policy</a>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer.built">Built With</h4>
+      <a href="https://github.com/nicenathapong/zca-js" target="_blank" rel="noopener">zca-js</a>
+      <a href="https://nodejs.org" target="_blank" rel="noopener">Node.js</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-bottom-row">
+      <span>&copy; 2026 openzca &middot; MIT License</span>
+      <span>openzca.com</span>
+    </div>
+    <p class="footer-legal" data-i18n="footer.legal">"Zalo" is a registered trademark of VNG Corporation. openzca is an independent open-source project and is not affiliated with, endorsed by, or associated with Zalo or VNG Corporation. This tool is provided for educational and personal research purposes only. Users are solely responsible for their use of this software and compliance with applicable terms of service and laws.</p>
+  </div>
+</footer>
+
+<script>
+/* ── Translations ── */
+var T = {
+  en: {
+    'nav.features': 'Features',
+    'nav.install': 'Installation',
+    'nav.how': 'How It Works',
+    'nav.faq': 'FAQ',
+    'nav.disclaimer': 'Disclaimer',
+    'hero.badge': '100% Free & Open Source',
+    'hero.title1': 'The Free Zalo CLI',
+    'hero.title2': 'for Developers',
+    'hero.desc': 'Send messages, manage groups, and listen for real-time events, all from your terminal. No license keys, no subscriptions, no device limits. Open source, MIT licensed, forever free.',
+    'hero.cta1': 'Get Started',
+    'features.label': 'Features',
+    'features.title': 'Full-featured Zalo CLI. No license required.',
+    'features.desc': 'Every command you need for Zalo automation, from messaging to group management. All free, all open source.',
+    'f.qr.title': 'QR Code Login',
+    'f.qr.desc': 'Scan to authenticate. Inline QR rendering in Ghostty, Kitty, WezTerm, and iTerm2. ASCII fallback for other terminals.',
+    'f.multi.title': 'Multi-Account',
+    'f.multi.desc': 'Manage multiple Zalo accounts with named profiles. Switch instantly between personal, work, and bot accounts.',
+    'f.msg.title': 'Rich Messaging',
+    'f.msg.desc': 'Send text, images, videos, voice messages, stickers, contact cards, links, and reactions to individuals or groups.',
+    'f.listen.title': 'Real-time Listener',
+    'f.listen.desc': 'WebSocket-powered message listener with webhook integration, auto-reply echo mode, and prefix filtering.',
+    'f.group.title': 'Group Management',
+    'f.group.desc': 'Create and configure groups, manage members and deputies, handle invite links and join requests.',
+    'f.friend.title': 'Friend Management',
+    'f.friend.desc': 'Search users by phone or username, send friend requests, manage aliases, block or unblock contacts.',
+    'f.profile.title': 'Profile & Status',
+    'f.profile.desc': 'View and update your Zalo profile, change avatars, set online status, and check last-seen times.',
+    'f.free.title': 'Free & Open Source',
+    'f.free.desc': 'MIT licensed. No license keys, no activation codes, no subscriptions, no device limits. Forever free.',
+    'install.label': 'Installation',
+    'install.title': 'Up and running in seconds',
+    'install.desc': 'Choose your preferred installation method. Requires Node.js 18 or higher.',
+    'how.label': 'How It Works',
+    'how.title': 'Start automating in 5 steps. No purchase required.',
+    'how.desc': 'Install, login, and start sending, all in under a minute.',
+    'step1.title': 'Install openzca',
+    'step1.desc': 'Install globally via npm or use the one-line installer script. Requires Node.js 18+.',
+    'step2.title': 'Login with QR code',
+    'step2.desc': 'Run',
+    'step2.desc2': 'and scan the QR code with your Zalo app. Done.',
+    'step3.title': 'Send your first message',
+    'step3.desc': 'Use',
+    'step3.desc2': 'to send text, images, videos, and more.',
+    'step4.title': 'Set up real-time listener',
+    'step4.desc': 'Run',
+    'step4.desc2': 'to receive messages in real-time via webhook.',
+    'step5.title': 'Manage multiple accounts',
+    'step5.desc': 'Create profiles with',
+    'step5.desc2': 'and switch between them instantly.',
+    'nav.openclaw': 'OpenClaw',
+    'oc.label': 'Integration',
+    'oc.title': 'Use with OpenClaw',
+    'oc.desc': 'openzca powers the ZaloUser plugin in OpenClaw, giving you AI-driven Zalo automation out of the box.',
+    'oc.sub': 'A smarter way to automate Zalo',
+    'oc.p1': 'OpenClaw is an AI agent platform that connects to multiple messaging services. With the ZaloUser plugin, it uses openzca under the hood to send and receive Zalo messages automatically.',
+    'oc.p2': 'If you prefer a visual, no-code approach instead of the CLI, OpenClaw + ZaloUser is a great alternative to zca-cli. Just install the plugin, scan the QR code, and let your AI agent handle the rest.',
+    'oc.p3': 'Watch the video to see how it works in action.',
+    'faq.label': 'FAQ',
+    'faq.title': 'Frequently Asked Questions',
+    'faq.q1': 'Is openzca really free?',
+    'faq.a1': 'Yes, 100% free and open source under the MIT license. No license keys, no subscriptions, no feature limits. You can use it for personal projects and research without any cost.',
+    'faq.q2': 'Is openzca an official Zalo product?',
+    'faq.a2': "No. openzca is an independent, unofficial, third-party open-source project. It is not affiliated with, endorsed by, sponsored by, or associated with Zalo or VNG Corporation in any way. It uses the publicly available zca-js library for API interactions. Using automation tools may violate Zalo\u2019s Terms of Service and could result in account restrictions. Use at your own risk and responsibility.",
+    'faq.q3': 'What is this tool intended for?',
+    'faq.a3': "openzca is intended for educational purposes, personal research, and legitimate personal automation. It provides a CLI interface to explore Zalo\u2019s messaging capabilities from a developer\u2019s perspective. Users are solely responsible for ensuring their use complies with all applicable laws and Zalo\u2019s Terms of Service.",
+    'faq.q4': 'Which terminals support inline QR codes?',
+    'faq.a4': 'Ghostty, Kitty, WezTerm, and iTerm2 support inline QR rendering via the Kitty Graphics Protocol or iTerm2 inline images. All other terminals get an ASCII QR fallback, or you can save the QR to a file and open it manually.',
+    'faq.q5': 'Can I manage multiple Zalo accounts?',
+    'faq.a5': 'Yes! openzca has a built-in profile system. Create named profiles for each account, switch between them with a single command, or specify a profile per command with the --profile flag.',
+    'faq.q6': 'What are the system requirements?',
+    'faq.a6': 'Node.js 18 or higher is required. openzca runs on macOS, Linux, and Windows. No additional dependencies needed, everything is installed via npm.',
+    'faq.q7': 'How is openzca different from zca-cli?',
+    'faq.a7': 'zca-cli requires a paid license with a multi-step activation process (support codes, bank transfer, device binding). openzca is 100% free, open source (MIT license), and works immediately after install, no license keys, no activation, no device limits. Same core features: messaging, groups, friends, profiles, and real-time listening. The source code is publicly available on GitHub for full transparency and community contributions.',
+    'disc.label': 'Disclaimer',
+    'disc.title': 'Important Legal Notice',
+    'disc.heading': 'Disclaimer & Legal Notice',
+    'disc.1a': 'openzca is an independent, unofficial, third-party open-source project. It is',
+    'disc.1b': 'not affiliated with, endorsed by, sponsored by, or associated with Zalo or VNG Corporation',
+    'disc.1c': 'in any way.',
+    'disc.2': '"Zalo" is a registered trademark of VNG Corporation. All trademarks, service marks, and trade names referenced herein are the property of their respective owners and are used solely for identification and descriptive purposes.',
+    'disc.3a': 'This software is provided for',
+    'disc.3b': 'educational purposes, personal research, and legitimate personal automation',
+    'disc.3c': 'only. It is intended as a developer tool for exploring messaging APIs from a research perspective.',
+    'disc.4a': 'openzca is built on the publicly available',
+    'disc.4b': 'open-source library (MIT license). No proprietary code belonging to Zalo or VNG Corporation is included in this project.',
+    'disc.5a': "Using automation tools may violate Zalo\u2019s Terms of Service and could result in account suspension or restrictions.",
+    'disc.5b': 'Users are solely responsible',
+    'disc.5c': "for ensuring their use complies with all applicable laws, regulations, and Zalo\u2019s Terms of Service.",
+    'disc.6': 'This software is provided "as is", without warranty of any kind, express or implied. The authors and contributors shall not be held liable for any damages arising from the use of this software.',
+    'disc.7': 'By using openzca, you acknowledge that you understand and accept these terms and that you use this tool at your own risk and responsibility.',
+    'oss.title': 'Open source, community driven',
+    'oss.desc': 'Join the community. Contribute on GitHub, report issues, or just star the repo.',
+    'oss.cta1': 'Star on GitHub',
+    'oss.cta2': 'View on npm',
+    'footer.note': 'Free, open-source Zalo CLI for educational and personal research purposes. Not affiliated with Zalo or VNG Corporation.',
+    'footer.resources': 'Resources',
+    'footer.issues': 'Report Issues',
+    'footer.community': 'Community',
+    'footer.discussions': 'Discussions',
+    'footer.contribute': 'Contributing',
+    'footer.legal_title': 'Legal',
+    'footer.terms': 'Terms of Service',
+    'footer.privacy': 'Privacy Policy',
+    'footer.built': 'Built With',
+    'footer.legal': '"Zalo" is a registered trademark of VNG Corporation. openzca is an independent open-source project and is not affiliated with, endorsed by, or associated with Zalo or VNG Corporation. This tool is provided for educational and personal research purposes only. Users are solely responsible for their use of this software and compliance with applicable terms of service and laws.'
+  },
+  vi: {
+    'nav.features': 'T\u00ednh n\u0103ng',
+    'nav.install': 'C\u00e0i \u0111\u1eb7t',
+    'nav.how': 'H\u01b0\u1edbng d\u1eabn',
+    'nav.faq': 'H\u1ecfi \u0111\u00e1p',
+    'nav.disclaimer': 'Mi\u1ec5n tr\u1eeb',
+    'hero.badge': '100% Mi\u1ec5n ph\u00ed & M\u00e3 ngu\u1ed3n m\u1edf',
+    'hero.title1': 'CLI Zalo mi\u1ec5n ph\u00ed',
+    'hero.title2': 'cho l\u1eadp tr\u00ecnh vi\u00ean',
+    'hero.desc': 'G\u1eedi tin nh\u1eafn, qu\u1ea3n l\u00fd nh\u00f3m v\u00e0 l\u1eafng nghe s\u1ef1 ki\u1ec7n th\u1eddi gian th\u1ef1c, t\u1ea5t c\u1ea3 t\u1eeb terminal. Kh\u00f4ng c\u1ea7n license key, kh\u00f4ng \u0111\u0103ng k\u00fd, kh\u00f4ng gi\u1edbi h\u1ea1n thi\u1ebft b\u1ecb. M\u00e3 ngu\u1ed3n m\u1edf, gi\u1ea5y ph\u00e9p MIT, mi\u1ec5n ph\u00ed m\u00e3i m\u00e3i.',
+    'hero.cta1': 'B\u1eaft \u0111\u1ea7u ngay',
+    'features.label': 'T\u00ednh n\u0103ng',
+    'features.title': 'CLI Zalo \u0111\u1ea7y \u0111\u1ee7 t\u00ednh n\u0103ng. Kh\u00f4ng c\u1ea7n license.',
+    'features.desc': 'M\u1ecdi l\u1ec7nh b\u1ea1n c\u1ea7n \u0111\u1ec3 t\u1ef1 \u0111\u1ed9ng h\u00f3a Zalo, t\u1eeb nh\u1eafn tin \u0111\u1ebfn qu\u1ea3n l\u00fd nh\u00f3m. Ho\u00e0n to\u00e0n mi\u1ec5n ph\u00ed, m\u00e3 ngu\u1ed3n m\u1edf.',
+    'f.qr.title': '\u0110\u0103ng nh\u1eadp QR Code',
+    'f.qr.desc': 'Qu\u00e9t m\u00e3 \u0111\u1ec3 x\u00e1c th\u1ef1c. Hi\u1ec3n th\u1ecb QR tr\u1ef1c ti\u1ebfp tr\u00ean Ghostty, Kitty, WezTerm v\u00e0 iTerm2. ASCII cho terminal kh\u00e1c.',
+    'f.multi.title': '\u0110a t\u00e0i kho\u1ea3n',
+    'f.multi.desc': 'Qu\u1ea3n l\u00fd nhi\u1ec1u t\u00e0i kho\u1ea3n Zalo v\u1edbi h\u1ed3 s\u01a1 \u0111\u1eb7t t\u00ean. Chuy\u1ec3n \u0111\u1ed5i t\u1ee9c th\u00ec gi\u1eefa t\u00e0i kho\u1ea3n c\u00e1 nh\u00e2n, c\u00f4ng vi\u1ec7c v\u00e0 bot.',
+    'f.msg.title': 'Nh\u1eafn tin \u0111a ph\u01b0\u01a1ng ti\u1ec7n',
+    'f.msg.desc': 'G\u1eedi v\u0103n b\u1ea3n, h\u00ecnh \u1ea3nh, video, tin nh\u1eafn tho\u1ea1i, sticker, danh thi\u1ebfp, link v\u00e0 reaction cho c\u00e1 nh\u00e2n ho\u1eb7c nh\u00f3m.',
+    'f.listen.title': 'L\u1eafng nghe th\u1eddi gian th\u1ef1c',
+    'f.listen.desc': 'L\u1eafng nghe tin nh\u1eafn qua WebSocket v\u1edbi t\u00edch h\u1ee3p webhook, ch\u1ebf \u0111\u1ed9 t\u1ef1 \u0111\u1ed9ng tr\u1ea3 l\u1eddi v\u00e0 l\u1ecdc ti\u1ec1n t\u1ed1.',
+    'f.group.title': 'Qu\u1ea3n l\u00fd nh\u00f3m',
+    'f.group.desc': 'T\u1ea1o v\u00e0 c\u1ea5u h\u00ecnh nh\u00f3m, qu\u1ea3n l\u00fd th\u00e0nh vi\u00ean v\u00e0 ph\u00f3 nh\u00f3m, x\u1eed l\u00fd link m\u1eddi v\u00e0 y\u00eau c\u1ea7u tham gia.',
+    'f.friend.title': 'Qu\u1ea3n l\u00fd b\u1ea1n b\u00e8',
+    'f.friend.desc': 'T\u00ecm ki\u1ebfm ng\u01b0\u1eddi d\u00f9ng theo s\u1ed1 \u0111i\u1ec7n tho\u1ea1i ho\u1eb7c t\u00ean, g\u1eedi l\u1eddi m\u1eddi k\u1ebft b\u1ea1n, qu\u1ea3n l\u00fd bi\u1ec7t danh, ch\u1eb7n ho\u1eb7c b\u1ecf ch\u1eb7n.',
+    'f.profile.title': 'H\u1ed3 s\u01a1 & Tr\u1ea1ng th\u00e1i',
+    'f.profile.desc': 'Xem v\u00e0 c\u1eadp nh\u1eadt h\u1ed3 s\u01a1 Zalo, thay \u0111\u1ed5i avatar, \u0111\u1eb7t tr\u1ea1ng th\u00e1i online v\u00e0 ki\u1ec3m tra l\u1ea7n cu\u1ed1i tr\u1ef1c tuy\u1ebfn.',
+    'f.free.title': 'Mi\u1ec5n ph\u00ed & M\u00e3 ngu\u1ed3n m\u1edf',
+    'f.free.desc': 'Gi\u1ea5y ph\u00e9p MIT. Kh\u00f4ng c\u1ea7n license key, kh\u00f4ng c\u1ea7n m\u00e3 k\u00edch ho\u1ea1t, kh\u00f4ng \u0111\u0103ng k\u00fd, kh\u00f4ng gi\u1edbi h\u1ea1n thi\u1ebft b\u1ecb. Mi\u1ec5n ph\u00ed m\u00e3i m\u00e3i.',
+    'install.label': 'C\u00e0i \u0111\u1eb7t',
+    'install.title': 'S\u1eb5n s\u00e0ng s\u1eed d\u1ee5ng trong v\u00e0i gi\u00e2y',
+    'install.desc': 'Ch\u1ecdn ph\u01b0\u01a1ng th\u1ee9c c\u00e0i \u0111\u1eb7t ph\u00f9 h\u1ee3p. Y\u00eau c\u1ea7u Node.js 18 tr\u1edf l\u00ean.',
+    'how.label': 'H\u01b0\u1edbng d\u1eabn',
+    'how.title': 'B\u1eaft \u0111\u1ea7u v\u1edbi 5 b\u01b0\u1edbc. Kh\u00f4ng c\u1ea7n mua license.',
+    'how.desc': 'C\u00e0i \u0111\u1eb7t, \u0111\u0103ng nh\u1eadp v\u00e0 b\u1eaft \u0111\u1ea7u g\u1eedi, ch\u1ec9 trong ch\u01b0a \u0111\u1ea7y m\u1ed9t ph\u00fat.',
+    'step1.title': 'C\u00e0i \u0111\u1eb7t openzca',
+    'step1.desc': 'C\u00e0i \u0111\u1eb7t to\u00e0n c\u1ee5c qua npm ho\u1eb7c d\u00f9ng script c\u00e0i \u0111\u1eb7t m\u1ed9t d\u00f2ng. Y\u00eau c\u1ea7u Node.js 18+.',
+    'step2.title': '\u0110\u0103ng nh\u1eadp b\u1eb1ng m\u00e3 QR',
+    'step2.desc': 'Ch\u1ea1y',
+    'step2.desc2': 'v\u00e0 qu\u00e9t m\u00e3 QR b\u1eb1ng \u1ee9ng d\u1ee5ng Zalo. Xong.',
+    'step3.title': 'G\u1eedi tin nh\u1eafn \u0111\u1ea7u ti\u00ean',
+    'step3.desc': 'D\u00f9ng',
+    'step3.desc2': '\u0111\u1ec3 g\u1eedi v\u0103n b\u1ea3n, h\u00ecnh \u1ea3nh, video v\u00e0 nhi\u1ec1u h\u01a1n n\u1eefa.',
+    'step4.title': 'Thi\u1ebft l\u1eadp l\u1eafng nghe th\u1eddi gian th\u1ef1c',
+    'step4.desc': 'Ch\u1ea1y',
+    'step4.desc2': '\u0111\u1ec3 nh\u1eadn tin nh\u1eafn th\u1eddi gian th\u1ef1c qua webhook.',
+    'step5.title': 'Qu\u1ea3n l\u00fd nhi\u1ec1u t\u00e0i kho\u1ea3n',
+    'step5.desc': 'T\u1ea1o h\u1ed3 s\u01a1 v\u1edbi',
+    'step5.desc2': 'v\u00e0 chuy\u1ec3n \u0111\u1ed5i t\u1ee9c th\u00ec gi\u1eefa c\u00e1c t\u00e0i kho\u1ea3n.',
+    'nav.openclaw': 'OpenClaw',
+    'oc.label': 'T\u00edch h\u1ee3p',
+    'oc.title': 'S\u1eed d\u1ee5ng v\u1edbi OpenClaw',
+    'oc.desc': 'openzca l\u00e0 n\u1ec1n t\u1ea3ng c\u1ee7a plugin ZaloUser trong OpenClaw, mang l\u1ea1i kh\u1ea3 n\u0103ng t\u1ef1 \u0111\u1ed9ng h\u00f3a Zalo b\u1eb1ng AI.',
+    'oc.sub': 'C\u00e1ch th\u00f4ng minh h\u01a1n \u0111\u1ec3 t\u1ef1 \u0111\u1ed9ng h\u00f3a Zalo',
+    'oc.p1': 'OpenClaw l\u00e0 n\u1ec1n t\u1ea3ng AI agent k\u1ebft n\u1ed1i nhi\u1ec1u d\u1ecbch v\u1ee5 nh\u1eafn tin. V\u1edbi plugin ZaloUser, n\u00f3 s\u1eed d\u1ee5ng openzca b\u00ean d\u01b0\u1edbi \u0111\u1ec3 g\u1eedi v\u00e0 nh\u1eadn tin nh\u1eafn Zalo t\u1ef1 \u0111\u1ed9ng.',
+    'oc.p2': 'N\u1ebfu b\u1ea1n th\u00edch c\u00e1ch ti\u1ebfp c\u1eadn tr\u1ef1c quan, kh\u00f4ng c\u1ea7n code thay v\u00ec d\u00f9ng CLI, OpenClaw + ZaloUser l\u00e0 l\u1ef1a ch\u1ecdn thay th\u1ebf tuy\u1ec7t v\u1eddi cho zca-cli. Ch\u1ec9 c\u1ea7n c\u00e0i plugin, qu\u00e9t m\u00e3 QR v\u00e0 \u0111\u1ec3 AI agent x\u1eed l\u00fd ph\u1ea7n c\u00f2n l\u1ea1i.',
+    'oc.p3': 'Xem video \u0111\u1ec3 th\u1ea5y c\u00e1ch ho\u1ea1t \u0111\u1ed9ng.',
+    'faq.label': 'H\u1ecfi \u0111\u00e1p',
+    'faq.title': 'C\u00e2u h\u1ecfi th\u01b0\u1eddng g\u1eb7p',
+    'faq.q1': 'openzca c\u00f3 th\u1eadt s\u1ef1 mi\u1ec5n ph\u00ed kh\u00f4ng?',
+    'faq.a1': 'C\u00f3, 100% mi\u1ec5n ph\u00ed v\u00e0 m\u00e3 ngu\u1ed3n m\u1edf theo gi\u1ea5y ph\u00e9p MIT. Kh\u00f4ng c\u1ea7n license key, kh\u00f4ng c\u1ea7n \u0111\u0103ng k\u00fd, kh\u00f4ng gi\u1edbi h\u1ea1n t\u00ednh n\u0103ng. B\u1ea1n c\u00f3 th\u1ec3 s\u1eed d\u1ee5ng cho d\u1ef1 \u00e1n c\u00e1 nh\u00e2n v\u00e0 nghi\u00ean c\u1ee9u m\u00e0 kh\u00f4ng m\u1ea5t ph\u00ed.',
+    'faq.q2': 'openzca c\u00f3 ph\u1ea3i s\u1ea3n ph\u1ea9m ch\u00ednh th\u1ee9c c\u1ee7a Zalo kh\u00f4ng?',
+    'faq.a2': 'Kh\u00f4ng. openzca l\u00e0 d\u1ef1 \u00e1n m\u00e3 ngu\u1ed3n m\u1edf \u0111\u1ed9c l\u1eadp, kh\u00f4ng ch\u00ednh th\u1ee9c, c\u1ee7a b\u00ean th\u1ee9 ba. N\u00f3 kh\u00f4ng li\u00ean k\u1ebft, kh\u00f4ng \u0111\u01b0\u1ee3c x\u00e1c nh\u1eadn, t\u00e0i tr\u1ee3 hay li\u00ean quan \u0111\u1ebfn Zalo ho\u1eb7c T\u1eadp \u0111o\u00e0n VNG d\u01b0\u1edbi b\u1ea5t k\u1ef3 h\u00ecnh th\u1ee9c n\u00e0o. N\u00f3 s\u1eed d\u1ee5ng th\u01b0 vi\u1ec7n zca-js c\u00f3 s\u1eb5n c\u00f4ng khai \u0111\u1ec3 t\u01b0\u01a1ng t\u00e1c API. Vi\u1ec7c s\u1eed d\u1ee5ng c\u00f4ng c\u1ee5 t\u1ef1 \u0111\u1ed9ng h\u00f3a c\u00f3 th\u1ec3 vi ph\u1ea1m \u0110i\u1ec1u kho\u1ea3n D\u1ecbch v\u1ee5 c\u1ee7a Zalo v\u00e0 c\u00f3 th\u1ec3 d\u1eabn \u0111\u1ebfn h\u1ea1n ch\u1ebf t\u00e0i kho\u1ea3n. S\u1eed d\u1ee5ng theo r\u1ee7i ro v\u00e0 tr\u00e1ch nhi\u1ec7m c\u1ee7a b\u1ea1n.',
+    'faq.q3': 'C\u00f4ng c\u1ee5 n\u00e0y d\u00f9ng \u0111\u1ec3 l\u00e0m g\u00ec?',
+    'faq.a3': 'openzca \u0111\u01b0\u1ee3c t\u1ea1o ra cho m\u1ee5c \u0111\u00edch gi\u00e1o d\u1ee5c, nghi\u00ean c\u1ee9u c\u00e1 nh\u00e2n v\u00e0 t\u1ef1 \u0111\u1ed9ng h\u00f3a c\u00e1 nh\u00e2n h\u1ee3p l\u1ec7. N\u00f3 cung c\u1ea5p giao di\u1ec7n CLI \u0111\u1ec3 kh\u00e1m ph\u00e1 kh\u1ea3 n\u0103ng nh\u1eafn tin c\u1ee7a Zalo t\u1eeb g\u00f3c \u0111\u1ed9 l\u1eadp tr\u00ecnh vi\u00ean. Ng\u01b0\u1eddi d\u00f9ng ho\u00e0n to\u00e0n ch\u1ecbu tr\u00e1ch nhi\u1ec7m \u0111\u1ea3m b\u1ea3o vi\u1ec7c s\u1eed d\u1ee5ng tu\u00e2n th\u1ee7 lu\u1eadt ph\u00e1p v\u00e0 \u0110i\u1ec1u kho\u1ea3n D\u1ecbch v\u1ee5 c\u1ee7a Zalo.',
+    'faq.q4': 'Terminal n\u00e0o h\u1ed7 tr\u1ee3 hi\u1ec3n th\u1ecb QR tr\u1ef1c ti\u1ebfp?',
+    'faq.a4': 'Ghostty, Kitty, WezTerm v\u00e0 iTerm2 h\u1ed7 tr\u1ee3 hi\u1ec3n th\u1ecb QR tr\u1ef1c ti\u1ebfp qua Kitty Graphics Protocol ho\u1eb7c iTerm2 inline images. C\u00e1c terminal kh\u00e1c s\u1ebd d\u00f9ng QR d\u1ea1ng ASCII, ho\u1eb7c b\u1ea1n c\u00f3 th\u1ec3 l\u01b0u QR ra file v\u00e0 m\u1edf th\u1ee7 c\u00f4ng.',
+    'faq.q5': 'C\u00f3 th\u1ec3 qu\u1ea3n l\u00fd nhi\u1ec1u t\u00e0i kho\u1ea3n Zalo kh\u00f4ng?',
+    'faq.a5': 'C\u00f3! openzca c\u00f3 h\u1ec7 th\u1ed1ng h\u1ed3 s\u01a1 t\u00edch h\u1ee3p. T\u1ea1o h\u1ed3 s\u01a1 \u0111\u1eb7t t\u00ean cho t\u1eebng t\u00e0i kho\u1ea3n, chuy\u1ec3n \u0111\u1ed5i b\u1eb1ng m\u1ed9t l\u1ec7nh duy nh\u1ea5t, ho\u1eb7c ch\u1ec9 \u0111\u1ecbnh h\u1ed3 s\u01a1 cho m\u1ed7i l\u1ec7nh v\u1edbi c\u1edd --profile.',
+    'faq.q6': 'Y\u00eau c\u1ea7u h\u1ec7 th\u1ed1ng l\u00e0 g\u00ec?',
+    'faq.a6': 'Y\u00eau c\u1ea7u Node.js 18 tr\u1edf l\u00ean. openzca ch\u1ea1y tr\u00ean macOS, Linux v\u00e0 Windows. Kh\u00f4ng c\u1ea7n th\u00eam ph\u1ee5 thu\u1ed9c , m\u1ecdi th\u1ee9 \u0111\u01b0\u1ee3c c\u00e0i qua npm.',
+    'faq.q7': 'openzca kh\u00e1c g\u00ec v\u1edbi zca-cli?',
+    'faq.a7': 'zca-cli y\u00eau c\u1ea7u mua license v\u1edbi quy tr\u00ecnh k\u00edch ho\u1ea1t nhi\u1ec1u b\u01b0\u1edbc (m\u00e3 h\u1ed7 tr\u1ee3, chuy\u1ec3n kho\u1ea3n, g\u1eafn thi\u1ebft b\u1ecb). openzca ho\u00e0n to\u00e0n mi\u1ec5n ph\u00ed, m\u00e3 ngu\u1ed3n m\u1edf (gi\u1ea5y ph\u00e9p MIT), v\u00e0 ho\u1ea1t \u0111\u1ed9ng ngay sau khi c\u00e0i \u0111\u1eb7t, kh\u00f4ng c\u1ea7n license key, kh\u00f4ng c\u1ea7n k\u00edch ho\u1ea1t, kh\u00f4ng gi\u1edbi h\u1ea1n thi\u1ebft b\u1ecb. C\u00f9ng t\u00ednh n\u0103ng c\u1ed1t l\u00f5i: nh\u1eafn tin, nh\u00f3m, b\u1ea1n b\u00e8, h\u1ed3 s\u01a1 v\u00e0 l\u1eafng nghe th\u1eddi gian th\u1ef1c. M\u00e3 ngu\u1ed3n c\u00f4ng khai tr\u00ean GitHub \u0111\u1ec3 minh b\u1ea1ch v\u00e0 \u0111\u00f3ng g\u00f3p c\u1ed9ng \u0111\u1ed3ng.',
+    'disc.label': 'Mi\u1ec5n tr\u1eeb',
+    'disc.title': 'Th\u00f4ng b\u00e1o ph\u00e1p l\u00fd quan tr\u1ecdng',
+    'disc.heading': 'Tuy\u00ean b\u1ed1 mi\u1ec5n tr\u1eeb & Th\u00f4ng b\u00e1o ph\u00e1p l\u00fd',
+    'disc.1a': 'openzca l\u00e0 d\u1ef1 \u00e1n m\u00e3 ngu\u1ed3n m\u1edf \u0111\u1ed9c l\u1eadp, kh\u00f4ng ch\u00ednh th\u1ee9c, c\u1ee7a b\u00ean th\u1ee9 ba. N\u00f3',
+    'disc.1b': 'kh\u00f4ng li\u00ean k\u1ebft, kh\u00f4ng \u0111\u01b0\u1ee3c x\u00e1c nh\u1eadn, t\u00e0i tr\u1ee3 hay li\u00ean quan \u0111\u1ebfn Zalo ho\u1eb7c T\u1eadp \u0111o\u00e0n VNG',
+    'disc.1c': 'd\u01b0\u1edbi b\u1ea5t k\u1ef3 h\u00ecnh th\u1ee9c n\u00e0o.',
+    'disc.2': '"Zalo" l\u00e0 nh\u00e3n hi\u1ec7u \u0111\u00e3 \u0111\u0103ng k\u00fd c\u1ee7a T\u1eadp \u0111o\u00e0n VNG. T\u1ea5t c\u1ea3 nh\u00e3n hi\u1ec7u, nh\u00e3n hi\u1ec7u d\u1ecbch v\u1ee5 v\u00e0 t\u00ean th\u01b0\u01a1ng m\u1ea1i \u0111\u01b0\u1ee3c nh\u1eafc \u0111\u1ebfn trong t\u00e0i li\u1ec7u n\u00e0y l\u00e0 t\u00e0i s\u1ea3n c\u1ee7a ch\u1ee7 s\u1edf h\u1eefu t\u01b0\u01a1ng \u1ee9ng v\u00e0 ch\u1ec9 \u0111\u01b0\u1ee3c s\u1eed d\u1ee5ng cho m\u1ee5c \u0111\u00edch nh\u1eadn d\u1ea1ng v\u00e0 m\u00f4 t\u1ea3.',
+    'disc.3a': 'Ph\u1ea7n m\u1ec1m n\u00e0y \u0111\u01b0\u1ee3c cung c\u1ea5p ch\u1ec9 cho m\u1ee5c \u0111\u00edch',
+    'disc.3b': 'gi\u00e1o d\u1ee5c, nghi\u00ean c\u1ee9u c\u00e1 nh\u00e2n v\u00e0 t\u1ef1 \u0111\u1ed9ng h\u00f3a c\u00e1 nh\u00e2n h\u1ee3p l\u1ec7',
+    'disc.3c': '. N\u00f3 \u0111\u01b0\u1ee3c d\u1ef1 \u0111\u1ecbnh l\u00e0 c\u00f4ng c\u1ee5 d\u00e0nh cho l\u1eadp tr\u00ecnh vi\u00ean \u0111\u1ec3 kh\u00e1m ph\u00e1 API nh\u1eafn tin t\u1eeb g\u00f3c \u0111\u1ed9 nghi\u00ean c\u1ee9u.',
+    'disc.4a': 'openzca \u0111\u01b0\u1ee3c x\u00e2y d\u1ef1ng tr\u00ean th\u01b0 vi\u1ec7n m\u00e3 ngu\u1ed3n m\u1edf c\u00f3 s\u1eb5n c\u00f4ng khai',
+    'disc.4b': '(gi\u1ea5y ph\u00e9p MIT). Kh\u00f4ng c\u00f3 m\u00e3 ngu\u1ed3n \u0111\u1ed9c quy\u1ec1n c\u1ee7a Zalo hay T\u1eadp \u0111o\u00e0n VNG trong d\u1ef1 \u00e1n n\u00e0y.',
+    'disc.5a': 'Vi\u1ec7c s\u1eed d\u1ee5ng c\u00f4ng c\u1ee5 t\u1ef1 \u0111\u1ed9ng h\u00f3a c\u00f3 th\u1ec3 vi ph\u1ea1m \u0110i\u1ec1u kho\u1ea3n D\u1ecbch v\u1ee5 c\u1ee7a Zalo v\u00e0 c\u00f3 th\u1ec3 d\u1eabn \u0111\u1ebfn \u0111\u00ecnh ch\u1ec9 ho\u1eb7c h\u1ea1n ch\u1ebf t\u00e0i kho\u1ea3n.',
+    'disc.5b': 'Ng\u01b0\u1eddi d\u00f9ng ho\u00e0n to\u00e0n ch\u1ecbu tr\u00e1ch nhi\u1ec7m',
+    'disc.5c': '\u0111\u1ea3m b\u1ea3o vi\u1ec7c s\u1eed d\u1ee5ng tu\u00e2n th\u1ee7 t\u1ea5t c\u1ea3 lu\u1eadt ph\u00e1p, quy \u0111\u1ecbnh v\u00e0 \u0110i\u1ec1u kho\u1ea3n D\u1ecbch v\u1ee5 c\u1ee7a Zalo.',
+    'disc.6': 'Ph\u1ea7n m\u1ec1m n\u00e0y \u0111\u01b0\u1ee3c cung c\u1ea5p "nguy\u00ean tr\u1ea1ng", kh\u00f4ng c\u00f3 b\u1ea5t k\u1ef3 b\u1ea3o \u0111\u1ea3m n\u00e0o, d\u00f9 r\u00f5 r\u00e0ng hay ng\u1ea7m \u0111\u1ecbnh. T\u00e1c gi\u1ea3 v\u00e0 ng\u01b0\u1eddi \u0111\u00f3ng g\u00f3p kh\u00f4ng ch\u1ecbu tr\u00e1ch nhi\u1ec7m v\u1ec1 b\u1ea5t k\u1ef3 thi\u1ec7t h\u1ea1i n\u00e0o ph\u00e1t sinh t\u1eeb vi\u1ec7c s\u1eed d\u1ee5ng ph\u1ea7n m\u1ec1m n\u00e0y.',
+    'disc.7': 'B\u1eb1ng vi\u1ec7c s\u1eed d\u1ee5ng openzca, b\u1ea1n th\u1eeba nh\u1eadn r\u1eb1ng b\u1ea1n hi\u1ec3u v\u00e0 ch\u1ea5p nh\u1eadn c\u00e1c \u0111i\u1ec1u kho\u1ea3n n\u00e0y v\u00e0 b\u1ea1n s\u1eed d\u1ee5ng c\u00f4ng c\u1ee5 n\u00e0y theo r\u1ee7i ro v\u00e0 tr\u00e1ch nhi\u1ec7m c\u1ee7a m\u00ecnh.',
+    'oss.title': 'M\u00e3 ngu\u1ed3n m\u1edf, c\u1ed9ng \u0111\u1ed3ng ph\u00e1t tri\u1ec3n',
+    'oss.desc': 'Tham gia c\u1ed9ng \u0111\u1ed3ng. \u0110\u00f3ng g\u00f3p tr\u00ean GitHub, b\u00e1o c\u00e1o l\u1ed7i, ho\u1eb7c ch\u1ec9 c\u1ea7n star repo.',
+    'oss.cta1': 'Star tr\u00ean GitHub',
+    'oss.cta2': 'Xem tr\u00ean npm',
+    'footer.note': 'CLI Zalo mi\u1ec5n ph\u00ed, m\u00e3 ngu\u1ed3n m\u1edf cho m\u1ee5c \u0111\u00edch gi\u00e1o d\u1ee5c v\u00e0 nghi\u00ean c\u1ee9u c\u00e1 nh\u00e2n. Kh\u00f4ng li\u00ean k\u1ebft v\u1edbi Zalo hay T\u1eadp \u0111o\u00e0n VNG.',
+    'footer.resources': 'T\u00e0i nguy\u00ean',
+    'footer.issues': 'B\u00e1o c\u00e1o l\u1ed7i',
+    'footer.community': 'C\u1ed9ng \u0111\u1ed3ng',
+    'footer.discussions': 'Th\u1ea3o lu\u1eadn',
+    'footer.contribute': '\u0110\u00f3ng g\u00f3p',
+    'footer.legal_title': 'Ph\u00e1p l\u00fd',
+    'footer.terms': '\u0110i\u1ec1u kho\u1ea3n s\u1eed d\u1ee5ng',
+    'footer.privacy': 'Ch\u00ednh s\u00e1ch b\u1ea3o m\u1eadt',
+    'footer.built': 'X\u00e2y d\u1ef1ng v\u1edbi',
+    'footer.legal': '"Zalo" l\u00e0 nh\u00e3n hi\u1ec7u \u0111\u00e3 \u0111\u0103ng k\u00fd c\u1ee7a T\u1eadp \u0111o\u00e0n VNG. openzca l\u00e0 d\u1ef1 \u00e1n m\u00e3 ngu\u1ed3n m\u1edf \u0111\u1ed9c l\u1eadp, kh\u00f4ng li\u00ean k\u1ebft, kh\u00f4ng \u0111\u01b0\u1ee3c x\u00e1c nh\u1eadn hay li\u00ean quan \u0111\u1ebfn Zalo ho\u1eb7c T\u1eadp \u0111o\u00e0n VNG. C\u00f4ng c\u1ee5 n\u00e0y ch\u1ec9 d\u00e0nh cho m\u1ee5c \u0111\u00edch gi\u00e1o d\u1ee5c v\u00e0 nghi\u00ean c\u1ee9u c\u00e1 nh\u00e2n. Ng\u01b0\u1eddi d\u00f9ng ho\u00e0n to\u00e0n ch\u1ecbu tr\u00e1ch nhi\u1ec7m v\u1ec1 vi\u1ec7c s\u1eed d\u1ee5ng ph\u1ea7n m\u1ec1m v\u00e0 tu\u00e2n th\u1ee7 \u0111i\u1ec1u kho\u1ea3n d\u1ecbch v\u1ee5 v\u00e0 lu\u1eadt ph\u00e1p.'
+  }
+};
+
+var currentLang = localStorage.getItem('openzca-lang') || 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('openzca-lang', lang);
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    if (T[lang] && T[lang][key]) {
+      el.textContent = T[lang][key];
+    }
+  });
+  document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+}
+
+document.querySelectorAll('.lang-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() { setLang(btn.dataset.lang); });
+});
+setLang(currentLang);
+
+document.getElementById('mobileToggle').addEventListener('click', function() {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+document.querySelectorAll('.nav-links a[href^="#"]').forEach(function(a) {
+  a.addEventListener('click', function() {
+    document.getElementById('navLinks').classList.remove('open');
+  });
+});
+
+document.querySelectorAll('.install-tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.install-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.install-panel').forEach(function(p) { p.classList.remove('active'); });
+    tab.classList.add('active');
+    document.querySelector('[data-panel="' + tab.dataset.tab + '"]').classList.add('active');
+  });
+});
+
+document.querySelectorAll('.copy-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    navigator.clipboard.writeText(btn.dataset.copy).then(function() {
+      var orig = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(function() { btn.textContent = orig; }, 1500);
+    });
+  });
+});
+
+document.querySelectorAll('.faq-question').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var item = btn.parentElement;
+    var answer = item.querySelector('.faq-answer');
+    var isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(function(i) {
+      i.classList.remove('open');
+      i.querySelector('.faq-answer').style.maxHeight = null;
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    }
+  });
+});
+
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.feature-card, .step, .faq-item, .integration-grid').forEach(function(el) {
+    observer.observe(el);
+  });
+}
+</script>
+
 </body>
 </html>
