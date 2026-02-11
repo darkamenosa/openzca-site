@@ -23,10 +23,11 @@ You can host installer scripts from this repo:
 - `install.sh`
 - `install.ps1`
 
-If `get.openzca.dev` points to this site:
+Preferred install commands:
 
-- `curl -fsSL https://get.openzca.dev/install.sh | bash`
-- `irm https://get.openzca.dev/install.ps1 | iex`
+- `npm install -g openzca`
+- `curl -fsSL https://openzca.com/install.sh | bash`
+- `irm https://openzca.com/install.ps1 | iex`
 
 ## SEO
 
