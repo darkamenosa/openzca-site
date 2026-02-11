@@ -14,8 +14,19 @@ This repo deploys to GitHub Pages via `.github/workflows/pages.yml`.
 
 - Primary: `openzca.com` (set as GitHub Pages custom domain)
 - Secondary: `openzca.dev`
-  - Option A: redirect to `https://openzca.com`
-  - Option B: map DNS to the same Pages target, but keep canonical on `openzca.com`
+  - Recommended: 301 redirect to `https://openzca.com`
+
+## Install endpoints
+
+You can host installer scripts from this repo:
+
+- `install.sh`
+- `install.ps1`
+
+If `get.openzca.dev` points to this site:
+
+- `curl -fsSL https://get.openzca.dev/install.sh | bash`
+- `irm https://get.openzca.dev/install.ps1 | iex`
 
 ## SEO
 
