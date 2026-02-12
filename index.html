@@ -474,7 +474,7 @@
         "name": "How is openzca different from zca-cli?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "zca-cli requires a paid license with a multi-step activation process. openzca is 100% free, open source (MIT license), and works immediately after install with no license keys or device limits."
+          "text": "zca-cli requires a paid license with a multi-step activation process. openzca is 100% free, open source (MIT license), and works immediately after install with no license keys or device limits. Same core features plus more: file transfers, inbound media caching, and debug logging."
         }
       },
       {
@@ -581,7 +581,7 @@
       <div class="feature-card">
         <div class="feature-icon">&#128274;</div>
         <h3 data-i18n="f.qr.title">QR Code Login</h3>
-        <p data-i18n="f.qr.desc">Scan to authenticate. Inline QR rendering in Ghostty, Kitty, WezTerm, and iTerm2. ASCII fallback for other terminals.</p>
+        <p data-i18n="f.qr.desc">Scan QR or login via credential file. Inline QR rendering in Ghostty, Kitty, WezTerm, and iTerm2. ASCII fallback for other terminals.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">&#128101;</div>
@@ -591,12 +591,12 @@
       <div class="feature-card">
         <div class="feature-icon">&#128172;</div>
         <h3 data-i18n="f.msg.title">Rich Messaging</h3>
-        <p data-i18n="f.msg.desc">Send text, images, videos, voice messages, stickers, contact cards, links, and reactions to individuals or groups.</p>
+        <p data-i18n="f.msg.desc">Send text, images, videos, voice, files, stickers, contact cards, links, and reactions. Forward, delete, or recall messages and view recent chat history.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">&#9889;</div>
         <h3 data-i18n="f.listen.title">Real-time Listener</h3>
-        <p data-i18n="f.listen.desc">WebSocket-powered message listener with webhook integration, auto-reply echo mode, and prefix filtering.</p>
+        <p data-i18n="f.listen.desc">WebSocket-powered listener with webhook integration, auto-reconnect, inbound media caching, raw JSON output, and prefix filtering. OpenClaw compatible.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">&#128119;</div>
@@ -798,7 +798,7 @@
           <span data-i18n="faq.q7">How is openzca different from zca-cli?</span>
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
-        <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq.a7">zca-cli requires a paid license with a multi-step activation process (support codes, bank transfer, device binding). openzca is 100% free, open source (MIT license), and works immediately after install, no license keys, no activation, no device limits. Same core features: messaging, groups, friends, profiles, and real-time listening. The source code is publicly available on GitHub for full transparency and community contributions.</div></div>
+        <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq.a7">zca-cli requires a paid license with a multi-step activation process (support codes, bank transfer, device binding). openzca is 100% free, open source (MIT license), and works immediately after install, no license keys, no activation, no device limits. Same core features plus more: messaging, file transfers, groups, friends, profiles, real-time listening with inbound media caching, and debug logging. Both &quot;openzca&quot; and &quot;zca&quot; work as command names. The source code is publicly available on GitHub for full transparency and community contributions.</div></div>
       </div>
     </div>
   </div>
@@ -901,13 +901,13 @@ var T = {
     'features.title': 'Full-featured Zalo CLI. No license required.',
     'features.desc': 'Every command you need for Zalo automation, from messaging to group management. All free, all open source.',
     'f.qr.title': 'QR Code Login',
-    'f.qr.desc': 'Scan to authenticate. Inline QR rendering in Ghostty, Kitty, WezTerm, and iTerm2. ASCII fallback for other terminals.',
+    'f.qr.desc': 'Scan QR or login via credential file. Inline QR rendering in Ghostty, Kitty, WezTerm, and iTerm2. ASCII fallback for other terminals.',
     'f.multi.title': 'Multi-Account',
     'f.multi.desc': 'Manage multiple Zalo accounts with named profiles. Switch instantly between personal, work, and bot accounts.',
     'f.msg.title': 'Rich Messaging',
-    'f.msg.desc': 'Send text, images, videos, voice messages, stickers, contact cards, links, and reactions to individuals or groups.',
+    'f.msg.desc': 'Send text, images, videos, voice, files, stickers, contact cards, links, and reactions. Forward, delete, or recall messages and view recent chat history.',
     'f.listen.title': 'Real-time Listener',
-    'f.listen.desc': 'WebSocket-powered message listener with webhook integration, auto-reply echo mode, and prefix filtering.',
+    'f.listen.desc': 'WebSocket-powered listener with webhook integration, auto-reconnect, inbound media caching, raw JSON output, and prefix filtering. OpenClaw compatible.',
     'f.group.title': 'Group Management',
     'f.group.desc': 'Create and configure groups, manage members and deputies, handle invite links and join requests.',
     'f.friend.title': 'Friend Management',
@@ -959,7 +959,7 @@ var T = {
     'faq.q6': 'What are the system requirements?',
     'faq.a6': 'Node.js 18 or higher is required. openzca runs on macOS, Linux, and Windows. No additional dependencies needed, everything is installed via npm.',
     'faq.q7': 'How is openzca different from zca-cli?',
-    'faq.a7': 'zca-cli requires a paid license with a multi-step activation process (support codes, bank transfer, device binding). openzca is 100% free, open source (MIT license), and works immediately after install, no license keys, no activation, no device limits. Same core features: messaging, groups, friends, profiles, and real-time listening. The source code is publicly available on GitHub for full transparency and community contributions.',
+    'faq.a7': 'zca-cli requires a paid license with a multi-step activation process (support codes, bank transfer, device binding). openzca is 100% free, open source (MIT license), and works immediately after install, no license keys, no activation, no device limits. Same core features plus more: messaging, file transfers, groups, friends, profiles, real-time listening with inbound media caching, and debug logging. Both "openzca" and "zca" work as command names. The source code is publicly available on GitHub for full transparency and community contributions.',
     'disc.label': 'Disclaimer',
     'disc.title': 'Important Legal Notice',
     'disc.heading': 'Disclaimer & Legal Notice',
@@ -1008,13 +1008,13 @@ var T = {
     'features.title': 'CLI Zalo \u0111\u1ea7y \u0111\u1ee7 t\u00ednh n\u0103ng. Kh\u00f4ng c\u1ea7n license.',
     'features.desc': 'M\u1ecdi l\u1ec7nh b\u1ea1n c\u1ea7n \u0111\u1ec3 t\u1ef1 \u0111\u1ed9ng h\u00f3a Zalo, t\u1eeb nh\u1eafn tin \u0111\u1ebfn qu\u1ea3n l\u00fd nh\u00f3m. Ho\u00e0n to\u00e0n mi\u1ec5n ph\u00ed, m\u00e3 ngu\u1ed3n m\u1edf.',
     'f.qr.title': '\u0110\u0103ng nh\u1eadp QR Code',
-    'f.qr.desc': 'Qu\u00e9t m\u00e3 \u0111\u1ec3 x\u00e1c th\u1ef1c. Hi\u1ec3n th\u1ecb QR tr\u1ef1c ti\u1ebfp tr\u00ean Ghostty, Kitty, WezTerm v\u00e0 iTerm2. ASCII cho terminal kh\u00e1c.',
+    'f.qr.desc': 'Qu\u00e9t QR ho\u1eb7c \u0111\u0103ng nh\u1eadp b\u1eb1ng file credential. Hi\u1ec3n th\u1ecb QR tr\u1ef1c ti\u1ebfp tr\u00ean Ghostty, Kitty, WezTerm v\u00e0 iTerm2. ASCII cho terminal kh\u00e1c.',
     'f.multi.title': '\u0110a t\u00e0i kho\u1ea3n',
     'f.multi.desc': 'Qu\u1ea3n l\u00fd nhi\u1ec1u t\u00e0i kho\u1ea3n Zalo v\u1edbi h\u1ed3 s\u01a1 \u0111\u1eb7t t\u00ean. Chuy\u1ec3n \u0111\u1ed5i t\u1ee9c th\u00ec gi\u1eefa t\u00e0i kho\u1ea3n c\u00e1 nh\u00e2n, c\u00f4ng vi\u1ec7c v\u00e0 bot.',
     'f.msg.title': 'Nh\u1eafn tin \u0111a ph\u01b0\u01a1ng ti\u1ec7n',
-    'f.msg.desc': 'G\u1eedi v\u0103n b\u1ea3n, h\u00ecnh \u1ea3nh, video, tin nh\u1eafn tho\u1ea1i, sticker, danh thi\u1ebfp, link v\u00e0 reaction cho c\u00e1 nh\u00e2n ho\u1eb7c nh\u00f3m.',
+    'f.msg.desc': 'G\u1eedi v\u0103n b\u1ea3n, h\u00ecnh \u1ea3nh, video, tho\u1ea1i, file, sticker, danh thi\u1ebfp, link v\u00e0 reaction. Chuy\u1ec3n ti\u1ebfp, x\u00f3a, thu h\u1ed3i tin nh\u1eafn v\u00e0 xem l\u1ecbch s\u1eed chat.',
     'f.listen.title': 'L\u1eafng nghe th\u1eddi gian th\u1ef1c',
-    'f.listen.desc': 'L\u1eafng nghe tin nh\u1eafn qua WebSocket v\u1edbi t\u00edch h\u1ee3p webhook, ch\u1ebf \u0111\u1ed9 t\u1ef1 \u0111\u1ed9ng tr\u1ea3 l\u1eddi v\u00e0 l\u1ecdc ti\u1ec1n t\u1ed1.',
+    'f.listen.desc': 'L\u1eafng nghe qua WebSocket v\u1edbi webhook, t\u1ef1 \u0111\u1ed9ng k\u1ebft n\u1ed1i l\u1ea1i, cache media, \u0111\u1ea7u ra JSON v\u00e0 l\u1ecdc ti\u1ec1n t\u1ed1. T\u01b0\u01a1ng th\u00edch OpenClaw.',
     'f.group.title': 'Qu\u1ea3n l\u00fd nh\u00f3m',
     'f.group.desc': 'T\u1ea1o v\u00e0 c\u1ea5u h\u00ecnh nh\u00f3m, qu\u1ea3n l\u00fd th\u00e0nh vi\u00ean v\u00e0 ph\u00f3 nh\u00f3m, x\u1eed l\u00fd link m\u1eddi v\u00e0 y\u00eau c\u1ea7u tham gia.',
     'f.friend.title': 'Qu\u1ea3n l\u00fd b\u1ea1n b\u00e8',
@@ -1066,7 +1066,7 @@ var T = {
     'faq.q6': 'Y\u00eau c\u1ea7u h\u1ec7 th\u1ed1ng l\u00e0 g\u00ec?',
     'faq.a6': 'Y\u00eau c\u1ea7u Node.js 18 tr\u1edf l\u00ean. openzca ch\u1ea1y tr\u00ean macOS, Linux v\u00e0 Windows. Kh\u00f4ng c\u1ea7n th\u00eam ph\u1ee5 thu\u1ed9c , m\u1ecdi th\u1ee9 \u0111\u01b0\u1ee3c c\u00e0i qua npm.',
     'faq.q7': 'openzca kh\u00e1c g\u00ec v\u1edbi zca-cli?',
-    'faq.a7': 'zca-cli y\u00eau c\u1ea7u mua license v\u1edbi quy tr\u00ecnh k\u00edch ho\u1ea1t nhi\u1ec1u b\u01b0\u1edbc (m\u00e3 h\u1ed7 tr\u1ee3, chuy\u1ec3n kho\u1ea3n, g\u1eafn thi\u1ebft b\u1ecb). openzca ho\u00e0n to\u00e0n mi\u1ec5n ph\u00ed, m\u00e3 ngu\u1ed3n m\u1edf (gi\u1ea5y ph\u00e9p MIT), v\u00e0 ho\u1ea1t \u0111\u1ed9ng ngay sau khi c\u00e0i \u0111\u1eb7t, kh\u00f4ng c\u1ea7n license key, kh\u00f4ng c\u1ea7n k\u00edch ho\u1ea1t, kh\u00f4ng gi\u1edbi h\u1ea1n thi\u1ebft b\u1ecb. C\u00f9ng t\u00ednh n\u0103ng c\u1ed1t l\u00f5i: nh\u1eafn tin, nh\u00f3m, b\u1ea1n b\u00e8, h\u1ed3 s\u01a1 v\u00e0 l\u1eafng nghe th\u1eddi gian th\u1ef1c. M\u00e3 ngu\u1ed3n c\u00f4ng khai tr\u00ean GitHub \u0111\u1ec3 minh b\u1ea1ch v\u00e0 \u0111\u00f3ng g\u00f3p c\u1ed9ng \u0111\u1ed3ng.',
+    'faq.a7': 'zca-cli y\u00eau c\u1ea7u mua license v\u1edbi quy tr\u00ecnh k\u00edch ho\u1ea1t nhi\u1ec1u b\u01b0\u1edbc (m\u00e3 h\u1ed7 tr\u1ee3, chuy\u1ec3n kho\u1ea3n, g\u1eafn thi\u1ebft b\u1ecb). openzca ho\u00e0n to\u00e0n mi\u1ec5n ph\u00ed, m\u00e3 ngu\u1ed3n m\u1edf (gi\u1ea5y ph\u00e9p MIT), v\u00e0 ho\u1ea1t \u0111\u1ed9ng ngay sau khi c\u00e0i \u0111\u1eb7t, kh\u00f4ng c\u1ea7n license key, kh\u00f4ng c\u1ea7n k\u00edch ho\u1ea1t, kh\u00f4ng gi\u1edbi h\u1ea1n thi\u1ebft b\u1ecb. C\u00f9ng t\u00ednh n\u0103ng c\u1ed1t l\u00f5i v\u00e0 h\u01a1n th\u1ebf: nh\u1eafn tin, truy\u1ec1n file, nh\u00f3m, b\u1ea1n b\u00e8, h\u1ed3 s\u01a1, l\u1eafng nghe th\u1eddi gian th\u1ef1c v\u1edbi cache media v\u00e0 debug logging. C\u1ea3 \"openzca\" v\u00e0 \"zca\" \u0111\u1ec1u d\u00f9ng \u0111\u01b0\u1ee3c l\u00e0m t\u00ean l\u1ec7nh. M\u00e3 ngu\u1ed3n c\u00f4ng khai tr\u00ean GitHub \u0111\u1ec3 minh b\u1ea1ch v\u00e0 \u0111\u00f3ng g\u00f3p c\u1ed9ng \u0111\u1ed3ng.',
     'disc.label': 'Mi\u1ec5n tr\u1eeb',
     'disc.title': 'Th\u00f4ng b\u00e1o ph\u00e1p l\u00fd quan tr\u1ecdng',
     'disc.heading': 'Tuy\u00ean b\u1ed1 mi\u1ec5n tr\u1eeb & Th\u00f4ng b\u00e1o ph\u00e1p l\u00fd',
