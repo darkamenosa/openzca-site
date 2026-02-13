@@ -15,6 +15,6 @@ if ($major -lt 18) {
 }
 
 Write-Host "Installing openzca globally..."
-npm i -g openzca
+npm i -g openzca@latest
 
 Write-Host "Installed. Run: openzca --help"

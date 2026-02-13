@@ -18,6 +18,6 @@ if [ "${NODE_MAJOR}" -lt 18 ]; then
 fi
 
 echo "Installing openzca globally..."
-npm i -g openzca
+npm i -g openzca@latest
 
 echo "Installed. Run: openzca --help"
