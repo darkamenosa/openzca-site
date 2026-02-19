@@ -25,7 +25,7 @@ You can host installer scripts from this repo:
 
 Preferred install commands:
 
-- `npm install -g openzca`
+- `npm install -g openzca@latest`
 - `curl -fsSL https://openzca.com/install.sh | bash`
 - `irm https://openzca.com/install.ps1 | iex`
 
