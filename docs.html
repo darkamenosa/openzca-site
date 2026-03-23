@@ -217,8 +217,12 @@
     .code-body .output { color: var(--text-secondary); }
 
     /* ── COMMAND TABLE ── */
+    .table-wrap {
+      border: 1px solid var(--border); border-radius: 10px;
+      overflow: hidden; margin-bottom: 24px;
+    }
     .cmd-table {
-      width: 100%; border-collapse: collapse; margin-bottom: 24px;
+      width: 100%; border-collapse: collapse;
       font-size: 14px;
     }
     .cmd-table th {
@@ -231,6 +235,7 @@
       padding: 10px 16px; border-bottom: 1px solid var(--border);
       color: var(--text-secondary); vertical-align: top;
     }
+    .cmd-table tr:last-child td { border-bottom: none; }
     .cmd-table td:first-child { white-space: nowrap; }
     .cmd-table td code {
       font-size: 12.5px; background: rgba(56, 189, 248, 0.08);
@@ -323,7 +328,7 @@
 
     /* ── FORMAT TABLE ── */
     .fmt-table {
-      width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 14px;
+      width: 100%; border-collapse: collapse; font-size: 14px;
     }
     .fmt-table th {
       text-align: left; padding: 10px 16px; font-size: 12px; font-weight: 600;
@@ -335,6 +340,7 @@
       padding: 10px 16px; border-bottom: 1px solid var(--border);
       color: var(--text-secondary); font-size: 14px;
     }
+    .fmt-table tr:last-child td { border-bottom: none; }
     .fmt-table td:first-child {
       font-family: var(--mono); font-size: 13px; color: var(--green);
       white-space: nowrap;
@@ -342,7 +348,7 @@
 
     /* ── ENV TABLE ── */
     .env-table {
-      width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 13px;
+      width: 100%; border-collapse: collapse; font-size: 13px;
     }
     .env-table th {
       text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 600;
@@ -534,7 +540,7 @@
     <h2 id="account"><span class="cmd-prefix">account</span> &mdash; Multi-account profile management</h2>
     <p>Manage multiple Zalo accounts with named profiles. Each profile stores its own credentials, cache, and database.</p>
 
-    <table class="cmd-table">
+    <div class="table-wrap"><table class="cmd-table">
       <thead><tr><th>Command</th><th>Description</th></tr></thead>
       <tbody>
         <tr><td><code>account list</code> <span class="alias">ls, l</span></td><td>List all account profiles</td></tr>
@@ -544,7 +550,7 @@
         <tr><td><code>account label &lt;name&gt; &lt;label&gt;</code></td><td>Set a display label for a profile</td></tr>
         <tr><td><code>account remove &lt;name&gt;</code> <span class="alias">rm</span></td><td>Remove a profile and its data</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <div class="code-block">
       <div class="code-header"><span>Examples</span></div>
@@ -566,7 +572,7 @@
     <h2 id="auth"><span class="cmd-prefix">auth</span> &mdash; Authentication &amp; cache</h2>
     <p>Login, logout, and manage the local friends/groups cache.</p>
 
-    <table class="cmd-table">
+    <div class="table-wrap"><table class="cmd-table">
       <thead><tr><th>Command</th><th>Description</th></tr></thead>
       <tbody>
         <tr><td><code>auth login</code></td><td>Login with QR code</td></tr>
@@ -577,7 +583,7 @@
         <tr><td><code>auth cache-info</code></td><td>Show cache metadata (last updated, counts)</td></tr>
         <tr><td><code>auth cache-clear</code></td><td>Clear local cache</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h3>auth login options</h3>
     <div class="opt-list">
@@ -606,7 +612,7 @@
     <h2 id="msg"><span class="cmd-prefix">msg</span> &mdash; Messaging</h2>
     <p>Send text, media, files, reactions, and manage conversations. Use <code>-g</code> to target group threads.</p>
 
-    <table class="cmd-table">
+    <div class="table-wrap"><table class="cmd-table">
       <thead><tr><th>Command</th><th>Description</th></tr></thead>
       <tbody>
         <tr><td><code>msg send &lt;threadId&gt; &lt;message&gt;</code></td><td>Send text with formatting and @mentions</td></tr>
@@ -629,7 +635,7 @@
         <tr><td><code>msg list-pins</code></td><td>List pinned conversations</td></tr>
         <tr><td><code>msg member-info &lt;userId&gt;</code></td><td>Get member/user profile info</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h3>msg send options</h3>
     <div class="opt-list">
@@ -721,7 +727,7 @@
     <h2 id="group"><span class="cmd-prefix">group</span> &mdash; Group management</h2>
     <p>Create groups, manage members, handle invite links, run polls, and configure group settings.</p>
 
-    <table class="cmd-table">
+    <div class="table-wrap"><table class="cmd-table">
       <thead><tr><th>Command</th><th>Description</th></tr></thead>
       <tbody>
         <tr><td><code>group list</code></td><td>List all groups</td></tr>
@@ -748,7 +754,7 @@
         <tr><td><code>group leave &lt;groupId&gt;</code></td><td>Leave a group</td></tr>
         <tr><td><code>group disperse &lt;groupId&gt;</code></td><td>Disperse (disband) a group</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h3>group settings options</h3>
     <div class="opt-list">
@@ -765,7 +771,7 @@
     <h3 id="group-poll">group poll</h3>
     <p>Create and manage polls within groups.</p>
 
-    <table class="cmd-table">
+    <div class="table-wrap"><table class="cmd-table">
       <thead><tr><th>Command</th><th>Description</th></tr></thead>
       <tbody>
         <tr><td><code>group poll create &lt;groupId&gt;</code></td><td>Create a poll</td></tr>
@@ -774,7 +780,7 @@
         <tr><td><code>group poll lock &lt;pollId&gt;</code></td><td>Close a poll</td></tr>
         <tr><td><code>group poll share &lt;pollId&gt;</code></td><td>Share a poll</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h3>group poll create options</h3>
     <div class="opt-list">
@@ -824,7 +830,7 @@
     <h2 id="friend"><span class="cmd-prefix">friend</span> &mdash; Friend management</h2>
     <p>Search users, manage friend requests, aliases, and blocking.</p>
 
-    <table class="cmd-table">
+    <div class="table-wrap"><table class="cmd-table">
       <thead><tr><th>Command</th><th>Description</th></tr></thead>
       <tbody>
         <tr><td><code>friend list</code></td><td>List all friends</td></tr>
@@ -847,7 +853,7 @@
         <tr><td><code>friend unblock-feed &lt;userId&gt;</code></td><td>Unblock user from viewing your feed</td></tr>
         <tr><td><code>friend boards &lt;conversationId&gt;</code></td><td>Get boards in a conversation</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h3>Notable options</h3>
     <div class="opt-list">
@@ -868,7 +874,7 @@
     <h2 id="me"><span class="cmd-prefix">me</span> &mdash; Profile &amp; account</h2>
     <p>View and update your Zalo profile, manage avatars, and set online status.</p>
 
-    <table class="cmd-table">
+    <div class="table-wrap"><table class="cmd-table">
       <thead><tr><th>Command</th><th>Description</th></tr></thead>
       <tbody>
         <tr><td><code>me info</code></td><td>Get your account info</td></tr>
@@ -881,7 +887,7 @@
         <tr><td><code>me status &lt;online|offline&gt;</code></td><td>Set online status</td></tr>
         <tr><td><code>me last-online &lt;userId&gt;</code></td><td>Check when a user was last online</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h3>me update options</h3>
     <div class="opt-list">
@@ -911,7 +917,7 @@
     </div>
 
     <h3>Database management</h3>
-    <table class="cmd-table">
+    <div class="table-wrap"><table class="cmd-table">
       <thead><tr><th>Command</th><th>Description</th></tr></thead>
       <tbody>
         <tr><td><code>db enable</code></td><td>Enable local SQLite persistence</td></tr>
@@ -919,7 +925,7 @@
         <tr><td><code>db reset</code></td><td>Delete the local SQLite DB file</td></tr>
         <tr><td><code>db status</code></td><td>Show DB status, message counts, and file path</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h3>db enable options</h3>
     <div class="opt-list">
@@ -942,7 +948,7 @@
     </div>
 
     <h3>Stored data queries</h3>
-    <table class="cmd-table">
+    <div class="table-wrap"><table class="cmd-table">
       <thead><tr><th>Command</th><th>Description</th></tr></thead>
       <tbody>
         <tr><td><code>db me info</code></td><td>Show stored self profile</td></tr>
@@ -960,7 +966,7 @@
         <tr><td><code>db chat messages &lt;chatId&gt;</code></td><td>List stored chat messages</td></tr>
         <tr><td><code>db message get &lt;id&gt;</code></td><td>Read one stored message by msgId, cliMsgId, or uid</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h3>Message query options</h3>
     <p>Available on <code>db group messages</code>, <code>db friend messages</code>, and <code>db chat messages</code>.</p>
@@ -1002,7 +1008,7 @@
     <h3 id="db-sync">db sync</h3>
     <p>Sync data from the Zalo server into the local database.</p>
 
-    <table class="cmd-table">
+    <div class="table-wrap"><table class="cmd-table">
       <thead><tr><th>Command</th><th>Description</th></tr></thead>
       <tbody>
         <tr><td><code>db sync</code></td><td>Sync all (groups + friends + chats)</td></tr>
@@ -1013,7 +1019,7 @@
         <tr><td><code>db sync group &lt;groupId&gt;</code></td><td>Sync one group with full history</td></tr>
         <tr><td><code>db sync chat &lt;chatId&gt;</code></td><td>Sync one chat</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h3>db sync options</h3>
     <div class="opt-list">
@@ -1115,7 +1121,7 @@
     <h2 id="text-formatting">Text Formatting</h2>
     <p>When sending messages with <code>msg send</code>, openzca parses Markdown-style syntax into Zalo text styles. Use <code>--raw</code> to skip formatting.</p>
 
-    <table class="fmt-table">
+    <div class="table-wrap"><table class="fmt-table">
       <thead><tr><th>Syntax</th><th>Result</th></tr></thead>
       <tbody>
         <tr><td>**bold**</td><td>Bold text</td></tr>
@@ -1133,11 +1139,11 @@
         <tr><td>> quote</td><td>Blockquote (indented)</td></tr>
         <tr><td>```code```</td><td>Fenced code block</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h3>Color &amp; size tags</h3>
     <p>Plain-text color and size tags for additional styling:</p>
-    <table class="fmt-table">
+    <div class="table-wrap"><table class="fmt-table">
       <thead><tr><th>Syntax</th><th>Result</th></tr></thead>
       <tbody>
         <tr><td>{red}text{/red}</td><td>Red colored text</td></tr>
@@ -1148,7 +1154,7 @@
         <tr><td>{small}text{/small}</td><td>Small text</td></tr>
         <tr><td>{underline}text{/underline}</td><td>Underlined text</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h3>@Mentions in groups</h3>
     <p>When sending to a group (<code>-g</code>), <code>@Name</code> or <code>@userId</code> resolves against the group member list. Matching works against user IDs, display names, and Zalo names. Mentions work inside styled text (e.g., <code>**@Alice**</code>).</p>
@@ -1163,7 +1169,7 @@
     <h2 id="env-vars">Environment Variables</h2>
     <p>Override defaults with environment variables. All are optional.</p>
 
-    <table class="env-table">
+    <div class="table-wrap"><table class="env-table">
       <thead><tr><th>Variable</th><th>Default</th><th>Description</th></tr></thead>
       <tbody>
         <tr class="env-group-header"><td colspan="3">Profile &amp; Data</td></tr>
@@ -1211,7 +1217,7 @@
         <tr class="env-group-header"><td colspan="3">System</td></tr>
         <tr><td>OPENZCA_SIGNAL_FORCE_EXIT_MS</td><td>1500</td><td>Force exit after signal timeout</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h3>Data storage paths</h3>
     <div class="code-block">
