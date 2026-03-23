@@ -303,7 +303,7 @@
     }
 
     /* ── FOOTER ── */
-    footer { border-top: 1px solid var(--border); padding: 40px 24px; }
+    footer { border-top: 1px solid var(--border); padding: 40px 24px; margin-left: var(--sidebar-w); }
     .footer-inner {
       max-width: 1200px; margin: 0 auto;
       display: flex; justify-content: space-between; align-items: flex-start;
@@ -394,6 +394,7 @@
       .sidebar.open { display: block; }
       .sidebar-mobile-toggle { display: flex; }
       .docs-main { padding: 32px 20px 80px; margin-left: 0; }
+      footer { margin-left: 0; }
       .nav-links { display: none; }
       .nav-links.open {
         display: flex; flex-direction: column; position: absolute;
