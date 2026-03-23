@@ -279,37 +279,6 @@
       padding: 2px 8px; border-radius: 4px; font-size: 13px; color: var(--accent);
     }
 
-    /* ── INTEGRATION ── */
-    .integration-section {
-      background: linear-gradient(180deg, transparent, rgba(56, 189, 248, 0.03), transparent);
-    }
-    .integration-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
-      align-items: center; max-width: 1000px; margin: 0 auto;
-    }
-    .integration-text h3 { font-size: 22px; font-weight: 700; margin-bottom: 12px; }
-    .integration-text p {
-      color: var(--text-secondary); font-size: 15px; line-height: 1.7; margin-bottom: 16px;
-    }
-    .integration-text .tag {
-      display: inline-block; padding: 4px 12px; border-radius: 6px;
-      font-size: 12px; font-weight: 600; margin-right: 6px; margin-bottom: 6px;
-    }
-    .tag-openclaw { background: rgba(56, 189, 248, 0.15); color: var(--accent); }
-    .tag-zalouser { background: rgba(56, 189, 248, 0.15); color: var(--accent); }
-    .tag-free { background: rgba(74, 222, 128, 0.15); color: var(--green); }
-    .video-wrapper {
-      position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
-      border-radius: 12px; border: 1px solid var(--border);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-    }
-    .video-wrapper iframe {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
-    }
-    @media (max-width: 768px) {
-      .integration-grid { grid-template-columns: 1fr; }
-    }
-
     /* ── FAQ ── */
     .faq-list { max-width: 700px; margin: 0 auto; }
     .faq-item { border-bottom: 1px solid var(--border); }
@@ -425,11 +394,11 @@
 
     /* ── ANIMATIONS ── */
     @media (prefers-reduced-motion: no-preference) {
-      .feature-card, .step, .faq-item, .integration-grid {
+      .feature-card, .step, .faq-item {
         opacity: 0; transform: translateY(20px);
         transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s, background 0.3s, box-shadow 0.3s;
       }
-      .feature-card.visible, .step.visible, .faq-item.visible, .integration-grid.visible {
+      .feature-card.visible, .step.visible, .faq-item.visible {
         opacity: 1; transform: translateY(0);
       }
     }
@@ -474,7 +443,7 @@
         "name": "How is openzca different from zca-cli?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "zca-cli requires a paid license with a multi-step activation process. openzca is 100% free, open source (MIT license), and works immediately after install with no license keys or device limits. Same core features plus more: file transfers, inbound media caching, and debug logging."
+          "text": "zca-cli requires a paid license with a multi-step activation process. openzca is 100% free, open source (MIT license), and works immediately after install with no license keys or device limits. Same core features plus more: Markdown text formatting with @mentions, message replies and editing, group polls, local SQLite database for offline message history, supervised listener mode with IPC, and extensive configuration."
         }
       },
       {
@@ -506,8 +475,8 @@
     <ul class="nav-links" id="navLinks">
       <li><a href="#features" data-i18n="nav.features">Features</a></li>
       <li><a href="#install" data-i18n="nav.install">Installation</a></li>
+      <li><a href="/docs.html" data-i18n="nav.docs">Docs</a></li>
       <li><a href="#how" data-i18n="nav.how">How It Works</a></li>
-      <li><a href="#openclaw" data-i18n="nav.openclaw">OpenClaw</a></li>
       <li><a href="#faq" data-i18n="nav.faq">FAQ</a></li>
       <li><a href="#disclaimer" data-i18n="nav.disclaimer">Disclaimer</a></li>
       <li><a href="https://github.com/darkamenosa/openzca" target="_blank" rel="noopener">GitHub</a></li>
@@ -591,17 +560,17 @@
       <div class="feature-card">
         <div class="feature-icon">&#128172;</div>
         <h3 data-i18n="f.msg.title">Rich Messaging</h3>
-        <p data-i18n="f.msg.desc">Send text, images, videos, voice, files, stickers, contact cards, links, and reactions. Forward, delete, or recall messages and view recent chat history.</p>
+        <p data-i18n="f.msg.desc">Send text with Markdown formatting and @mentions, images, videos, voice, files, stickers, contact cards, and links. Reply, edit, forward, pin, react, delete, or recall messages.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">&#9889;</div>
         <h3 data-i18n="f.listen.title">Real-time Listener</h3>
-        <p data-i18n="f.listen.desc">WebSocket-powered listener with webhook integration, auto-reconnect, inbound media caching, raw JSON output, and prefix filtering. OpenClaw compatible.</p>
+        <p data-i18n="f.listen.desc">WebSocket-powered listener with webhook integration, keep-alive auto-reconnect, supervised mode with IPC, inbound media caching, raw JSON output, and prefix filtering.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">&#128119;</div>
         <h3 data-i18n="f.group.title">Group Management</h3>
-        <p data-i18n="f.group.desc">Create and configure groups, manage members and deputies, handle invite links and join requests.</p>
+        <p data-i18n="f.group.desc">Create and configure groups, manage members and deputies, handle invite links and join requests. Create polls, block members, and transfer ownership.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">&#128100;</div>
@@ -612,6 +581,16 @@
         <div class="feature-icon">&#128736;</div>
         <h3 data-i18n="f.profile.title">Profile &amp; Status</h3>
         <p data-i18n="f.profile.desc">View and update your Zalo profile, change avatars, set online status, and check last-seen times.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#128452;</div>
+        <h3 data-i18n="f.db.title">Local Database</h3>
+        <p data-i18n="f.db.desc">SQLite-backed message persistence with full sync. Query messages offline with time-range filters, search across groups and DMs, and browse chat history locally.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#9997;</div>
+        <h3 data-i18n="f.format.title">Text Formatting</h3>
+        <p data-i18n="f.format.desc">Markdown-style formatting with **bold**, *italic*, ~~strikethrough~~, headings, lists, blockquotes, code blocks, and color tags. @mention group members by name.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">&#127793;</div>
@@ -714,35 +693,6 @@
   </div>
 </section>
 
-<!-- ═══ OPENCLAW INTEGRATION ═══ -->
-<section class="section integration-section" id="openclaw">
-  <div class="section-inner">
-    <div class="section-header">
-      <div class="section-label" data-i18n="oc.label">Integration</div>
-      <h2 class="section-title" data-i18n="oc.title">Use with OpenClaw</h2>
-      <p class="section-desc" data-i18n="oc.desc">openzca powers the ZaloUser plugin in OpenClaw, giving you AI-driven Zalo automation out of the box.</p>
-    </div>
-    <div class="integration-grid">
-      <div class="integration-text">
-        <div style="margin-bottom:16px">
-          <span class="tag tag-openclaw">OpenClaw</span>
-          <span class="tag tag-zalouser">ZaloUser Plugin</span>
-          <span class="tag tag-free">Free</span>
-        </div>
-        <h3 data-i18n="oc.sub">A smarter way to automate Zalo</h3>
-        <p data-i18n="oc.p1">OpenClaw is an AI agent platform that connects to multiple messaging services. With the ZaloUser plugin, it uses openzca under the hood to send and receive Zalo messages automatically.</p>
-        <p data-i18n="oc.p2">If you prefer a visual, no-code approach instead of the CLI, OpenClaw + ZaloUser is a great alternative to zca-cli. Just install the plugin, scan the QR code, and let your AI agent handle the rest.</p>
-        <p data-i18n="oc.p3">Watch the video to see how it works in action.</p>
-      </div>
-      <div>
-        <div class="video-wrapper">
-          <iframe src="https://www.youtube.com/embed/5wB4V9RtOmc?rel=0" title="OpenClaw ZaloUser Plugin Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ═══ FAQ ═══ -->
 <section class="section" id="faq">
   <div class="section-inner">
@@ -798,7 +748,7 @@
           <span data-i18n="faq.q7">How is openzca different from zca-cli?</span>
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
-        <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq.a7">zca-cli requires a paid license with a multi-step activation process (support codes, bank transfer, device binding). openzca is 100% free, open source (MIT license), and works immediately after install, no license keys, no activation, no device limits. Same core features plus more: messaging, file transfers, groups, friends, profiles, real-time listening with inbound media caching, and debug logging. Both &quot;openzca&quot; and &quot;zca&quot; work as command names. The source code is publicly available on GitHub for full transparency and community contributions.</div></div>
+        <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq.a7">zca-cli requires a paid license with a multi-step activation process (support codes, bank transfer, device binding). openzca is 100% free, open source (MIT license), and works immediately after install, no license keys, no activation, no device limits. Same core features plus more: Markdown-style text formatting with @mentions, message replies and editing, group polls, local SQLite database for offline message history, supervised listener mode with IPC, and extensive environment variable configuration. Both &quot;openzca&quot; and &quot;zca&quot; work as command names. The source code is publicly available on GitHub for full transparency and community contributions.</div></div>
       </div>
     </div>
   </div>
@@ -855,6 +805,7 @@
     </div>
     <div class="footer-col">
       <h4 data-i18n="footer.resources">Resources</h4>
+      <a href="/docs.html" data-i18n="footer.docs">Documentation</a>
       <a href="https://github.com/darkamenosa/openzca" target="_blank" rel="noopener">GitHub</a>
       <a href="https://www.npmjs.com/package/openzca" target="_blank" rel="noopener">npm</a>
       <a href="https://github.com/darkamenosa/openzca/issues" target="_blank" rel="noopener" data-i18n="footer.issues">Report Issues</a>
@@ -889,6 +840,7 @@ var T = {
   en: {
     'nav.features': 'Features',
     'nav.install': 'Installation',
+    'nav.docs': 'Docs',
     'nav.how': 'How It Works',
     'nav.faq': 'FAQ',
     'nav.disclaimer': 'Disclaimer',
@@ -905,16 +857,20 @@ var T = {
     'f.multi.title': 'Multi-Account',
     'f.multi.desc': 'Manage multiple Zalo accounts with named profiles. Switch instantly between personal, work, and bot accounts.',
     'f.msg.title': 'Rich Messaging',
-    'f.msg.desc': 'Send text, images, videos, voice, files, stickers, contact cards, links, and reactions. Forward, delete, or recall messages and view recent chat history.',
+    'f.msg.desc': 'Send text with Markdown formatting and @mentions, images, videos, voice, files, stickers, contact cards, and links. Reply, edit, forward, pin, react, delete, or recall messages.',
     'f.listen.title': 'Real-time Listener',
-    'f.listen.desc': 'WebSocket-powered listener with webhook integration, auto-reconnect, inbound media caching, raw JSON output, and prefix filtering. OpenClaw compatible.',
+    'f.listen.desc': 'WebSocket-powered listener with webhook integration, keep-alive auto-reconnect, supervised mode with IPC, inbound media caching, raw JSON output, and prefix filtering.',
     'f.group.title': 'Group Management',
-    'f.group.desc': 'Create and configure groups, manage members and deputies, handle invite links and join requests.',
+    'f.group.desc': 'Create and configure groups, manage members and deputies, handle invite links and join requests. Create polls, block members, and transfer ownership.',
     'f.friend.title': 'Friend Management',
     'f.friend.desc': 'Search users by phone or username, send friend requests, manage aliases, block or unblock contacts.',
     'f.profile.title': 'Profile & Status',
     'f.profile.desc': 'View and update your Zalo profile, change avatars, set online status, and check last-seen times.',
     'f.free.title': 'Free & Open Source',
+    'f.db.title': 'Local Database',
+    'f.db.desc': 'SQLite-backed message persistence with full sync. Query messages offline with time-range filters, search across groups and DMs, and browse chat history locally.',
+    'f.format.title': 'Text Formatting',
+    'f.format.desc': 'Markdown-style formatting with **bold**, *italic*, ~~strikethrough~~, headings, lists, blockquotes, code blocks, and color tags. @mention group members by name.',
     'f.free.desc': 'MIT licensed. No license keys, no activation codes, no subscriptions, no device limits. Forever free.',
     'install.label': 'Installation',
     'install.title': 'Up and running in seconds',
@@ -936,14 +892,6 @@ var T = {
     'step5.title': 'Manage multiple accounts',
     'step5.desc': 'Create profiles with',
     'step5.desc2': 'and switch between them instantly.',
-    'nav.openclaw': 'OpenClaw',
-    'oc.label': 'Integration',
-    'oc.title': 'Use with OpenClaw',
-    'oc.desc': 'openzca powers the ZaloUser plugin in OpenClaw, giving you AI-driven Zalo automation out of the box.',
-    'oc.sub': 'A smarter way to automate Zalo',
-    'oc.p1': 'OpenClaw is an AI agent platform that connects to multiple messaging services. With the ZaloUser plugin, it uses openzca under the hood to send and receive Zalo messages automatically.',
-    'oc.p2': 'If you prefer a visual, no-code approach instead of the CLI, OpenClaw + ZaloUser is a great alternative to zca-cli. Just install the plugin, scan the QR code, and let your AI agent handle the rest.',
-    'oc.p3': 'Watch the video to see how it works in action.',
     'faq.label': 'FAQ',
     'faq.title': 'Frequently Asked Questions',
     'faq.q1': 'Is openzca really free?',
@@ -959,7 +907,7 @@ var T = {
     'faq.q6': 'What are the system requirements?',
     'faq.a6': 'Node.js 18 or higher is required. openzca runs on macOS, Linux, and Windows. No additional dependencies needed, everything is installed via npm.',
     'faq.q7': 'How is openzca different from zca-cli?',
-    'faq.a7': 'zca-cli requires a paid license with a multi-step activation process (support codes, bank transfer, device binding). openzca is 100% free, open source (MIT license), and works immediately after install, no license keys, no activation, no device limits. Same core features plus more: messaging, file transfers, groups, friends, profiles, real-time listening with inbound media caching, and debug logging. Both "openzca" and "zca" work as command names. The source code is publicly available on GitHub for full transparency and community contributions.',
+    'faq.a7': 'zca-cli requires a paid license with a multi-step activation process (support codes, bank transfer, device binding). openzca is 100% free, open source (MIT license), and works immediately after install, no license keys, no activation, no device limits. Same core features plus more: Markdown-style text formatting with @mentions, message replies and editing, group polls, local SQLite database for offline message history, supervised listener mode with IPC, and extensive environment variable configuration. Both "openzca" and "zca" work as command names. The source code is publicly available on GitHub for full transparency and community contributions.',
     'disc.label': 'Disclaimer',
     'disc.title': 'Important Legal Notice',
     'disc.heading': 'Disclaimer & Legal Notice',
@@ -983,10 +931,11 @@ var T = {
     'oss.cta2': 'View on npm',
     'footer.note': 'Free, open-source Zalo CLI for educational and personal research purposes. Not affiliated with Zalo or VNG Corporation.',
     'footer.resources': 'Resources',
+    'footer.docs': 'Documentation',
     'footer.issues': 'Report Issues',
     'footer.community': 'Community',
-    'footer.discussions': 'Discussions',
-    'footer.contribute': 'Contributing',
+    'footer.discussions': 'Issues',
+
     'footer.legal_title': 'Legal',
     'footer.terms': 'Terms of Service',
     'footer.privacy': 'Privacy Policy',
@@ -996,6 +945,7 @@ var T = {
   vi: {
     'nav.features': 'T\u00ednh n\u0103ng',
     'nav.install': 'C\u00e0i \u0111\u1eb7t',
+    'nav.docs': 'T\u00e0i li\u1ec7u',
     'nav.how': 'H\u01b0\u1edbng d\u1eabn',
     'nav.faq': 'H\u1ecfi \u0111\u00e1p',
     'nav.disclaimer': 'Mi\u1ec5n tr\u1eeb',
@@ -1012,16 +962,20 @@ var T = {
     'f.multi.title': '\u0110a t\u00e0i kho\u1ea3n',
     'f.multi.desc': 'Qu\u1ea3n l\u00fd nhi\u1ec1u t\u00e0i kho\u1ea3n Zalo v\u1edbi h\u1ed3 s\u01a1 \u0111\u1eb7t t\u00ean. Chuy\u1ec3n \u0111\u1ed5i t\u1ee9c th\u00ec gi\u1eefa t\u00e0i kho\u1ea3n c\u00e1 nh\u00e2n, c\u00f4ng vi\u1ec7c v\u00e0 bot.',
     'f.msg.title': 'Nh\u1eafn tin \u0111a ph\u01b0\u01a1ng ti\u1ec7n',
-    'f.msg.desc': 'G\u1eedi v\u0103n b\u1ea3n, h\u00ecnh \u1ea3nh, video, tho\u1ea1i, file, sticker, danh thi\u1ebfp, link v\u00e0 reaction. Chuy\u1ec3n ti\u1ebfp, x\u00f3a, thu h\u1ed3i tin nh\u1eafn v\u00e0 xem l\u1ecbch s\u1eed chat.',
+    'f.msg.desc': 'G\u1eedi v\u0103n b\u1ea3n v\u1edbi \u0111\u1ecbnh d\u1ea1ng Markdown v\u00e0 @mention, h\u00ecnh \u1ea3nh, video, tho\u1ea1i, file, sticker, danh thi\u1ebfp v\u00e0 link. Tr\u1ea3 l\u1eddi, ch\u1ec9nh s\u1eeda, chuy\u1ec3n ti\u1ebfp, ghim, reaction, x\u00f3a ho\u1eb7c thu h\u1ed3i tin nh\u1eafn.',
     'f.listen.title': 'L\u1eafng nghe th\u1eddi gian th\u1ef1c',
-    'f.listen.desc': 'L\u1eafng nghe qua WebSocket v\u1edbi webhook, t\u1ef1 \u0111\u1ed9ng k\u1ebft n\u1ed1i l\u1ea1i, cache media, \u0111\u1ea7u ra JSON v\u00e0 l\u1ecdc ti\u1ec1n t\u1ed1. T\u01b0\u01a1ng th\u00edch OpenClaw.',
+    'f.listen.desc': 'L\u1eafng nghe qua WebSocket v\u1edbi webhook, keep-alive t\u1ef1 \u0111\u1ed9ng k\u1ebft n\u1ed1i l\u1ea1i, ch\u1ebf \u0111\u1ed9 supervised v\u1edbi IPC, cache media, \u0111\u1ea7u ra JSON v\u00e0 l\u1ecdc ti\u1ec1n t\u1ed1.',
     'f.group.title': 'Qu\u1ea3n l\u00fd nh\u00f3m',
-    'f.group.desc': 'T\u1ea1o v\u00e0 c\u1ea5u h\u00ecnh nh\u00f3m, qu\u1ea3n l\u00fd th\u00e0nh vi\u00ean v\u00e0 ph\u00f3 nh\u00f3m, x\u1eed l\u00fd link m\u1eddi v\u00e0 y\u00eau c\u1ea7u tham gia.',
+    'f.group.desc': 'T\u1ea1o v\u00e0 c\u1ea5u h\u00ecnh nh\u00f3m, qu\u1ea3n l\u00fd th\u00e0nh vi\u00ean v\u00e0 ph\u00f3 nh\u00f3m, x\u1eed l\u00fd link m\u1eddi v\u00e0 y\u00eau c\u1ea7u tham gia. T\u1ea1o kh\u1ea3o s\u00e1t, ch\u1eb7n th\u00e0nh vi\u00ean v\u00e0 chuy\u1ec3n quy\u1ec1n s\u1edf h\u1eefu.',
     'f.friend.title': 'Qu\u1ea3n l\u00fd b\u1ea1n b\u00e8',
     'f.friend.desc': 'T\u00ecm ki\u1ebfm ng\u01b0\u1eddi d\u00f9ng theo s\u1ed1 \u0111i\u1ec7n tho\u1ea1i ho\u1eb7c t\u00ean, g\u1eedi l\u1eddi m\u1eddi k\u1ebft b\u1ea1n, qu\u1ea3n l\u00fd bi\u1ec7t danh, ch\u1eb7n ho\u1eb7c b\u1ecf ch\u1eb7n.',
     'f.profile.title': 'H\u1ed3 s\u01a1 & Tr\u1ea1ng th\u00e1i',
     'f.profile.desc': 'Xem v\u00e0 c\u1eadp nh\u1eadt h\u1ed3 s\u01a1 Zalo, thay \u0111\u1ed5i avatar, \u0111\u1eb7t tr\u1ea1ng th\u00e1i online v\u00e0 ki\u1ec3m tra l\u1ea7n cu\u1ed1i tr\u1ef1c tuy\u1ebfn.',
     'f.free.title': 'Mi\u1ec5n ph\u00ed & M\u00e3 ngu\u1ed3n m\u1edf',
+    'f.db.title': 'C\u01a1 s\u1edf d\u1eef li\u1ec7u n\u1ed9i b\u1ed9',
+    'f.db.desc': 'L\u01b0u tr\u1eef tin nh\u1eafn b\u1eb1ng SQLite v\u1edbi \u0111\u1ed3ng b\u1ed9 \u0111\u1ea7y \u0111\u1ee7. Truy v\u1ea5n tin nh\u1eafn offline v\u1edbi b\u1ed9 l\u1ecdc th\u1eddi gian, t\u00ecm ki\u1ebfm qua nh\u00f3m v\u00e0 tin nh\u1eafn ri\u00eang, duy\u1ec7t l\u1ecbch s\u1eed chat t\u1ea1i ch\u1ed7.',
+    'f.format.title': '\u0110\u1ecbnh d\u1ea1ng v\u0103n b\u1ea3n',
+    'f.format.desc': '\u0110\u1ecbnh d\u1ea1ng ki\u1ec3u Markdown v\u1edbi **\u0111\u1eadm**, *nghi\u00eang*, ~~g\u1ea1ch ngang~~, ti\u00eau \u0111\u1ec1, danh s\u00e1ch, tr\u00edch d\u1eabn, kh\u1ed1i m\u00e3 v\u00e0 th\u1ebb m\u00e0u. @mention th\u00e0nh vi\u00ean nh\u00f3m theo t\u00ean.',
     'f.free.desc': 'Gi\u1ea5y ph\u00e9p MIT. Kh\u00f4ng c\u1ea7n license key, kh\u00f4ng c\u1ea7n m\u00e3 k\u00edch ho\u1ea1t, kh\u00f4ng \u0111\u0103ng k\u00fd, kh\u00f4ng gi\u1edbi h\u1ea1n thi\u1ebft b\u1ecb. Mi\u1ec5n ph\u00ed m\u00e3i m\u00e3i.',
     'install.label': 'C\u00e0i \u0111\u1eb7t',
     'install.title': 'S\u1eb5n s\u00e0ng s\u1eed d\u1ee5ng trong v\u00e0i gi\u00e2y',
@@ -1043,14 +997,6 @@ var T = {
     'step5.title': 'Qu\u1ea3n l\u00fd nhi\u1ec1u t\u00e0i kho\u1ea3n',
     'step5.desc': 'T\u1ea1o h\u1ed3 s\u01a1 v\u1edbi',
     'step5.desc2': 'v\u00e0 chuy\u1ec3n \u0111\u1ed5i t\u1ee9c th\u00ec gi\u1eefa c\u00e1c t\u00e0i kho\u1ea3n.',
-    'nav.openclaw': 'OpenClaw',
-    'oc.label': 'T\u00edch h\u1ee3p',
-    'oc.title': 'S\u1eed d\u1ee5ng v\u1edbi OpenClaw',
-    'oc.desc': 'openzca l\u00e0 n\u1ec1n t\u1ea3ng c\u1ee7a plugin ZaloUser trong OpenClaw, mang l\u1ea1i kh\u1ea3 n\u0103ng t\u1ef1 \u0111\u1ed9ng h\u00f3a Zalo b\u1eb1ng AI.',
-    'oc.sub': 'C\u00e1ch th\u00f4ng minh h\u01a1n \u0111\u1ec3 t\u1ef1 \u0111\u1ed9ng h\u00f3a Zalo',
-    'oc.p1': 'OpenClaw l\u00e0 n\u1ec1n t\u1ea3ng AI agent k\u1ebft n\u1ed1i nhi\u1ec1u d\u1ecbch v\u1ee5 nh\u1eafn tin. V\u1edbi plugin ZaloUser, n\u00f3 s\u1eed d\u1ee5ng openzca b\u00ean d\u01b0\u1edbi \u0111\u1ec3 g\u1eedi v\u00e0 nh\u1eadn tin nh\u1eafn Zalo t\u1ef1 \u0111\u1ed9ng.',
-    'oc.p2': 'N\u1ebfu b\u1ea1n th\u00edch c\u00e1ch ti\u1ebfp c\u1eadn tr\u1ef1c quan, kh\u00f4ng c\u1ea7n code thay v\u00ec d\u00f9ng CLI, OpenClaw + ZaloUser l\u00e0 l\u1ef1a ch\u1ecdn thay th\u1ebf tuy\u1ec7t v\u1eddi cho zca-cli. Ch\u1ec9 c\u1ea7n c\u00e0i plugin, qu\u00e9t m\u00e3 QR v\u00e0 \u0111\u1ec3 AI agent x\u1eed l\u00fd ph\u1ea7n c\u00f2n l\u1ea1i.',
-    'oc.p3': 'Xem video \u0111\u1ec3 th\u1ea5y c\u00e1ch ho\u1ea1t \u0111\u1ed9ng.',
     'faq.label': 'H\u1ecfi \u0111\u00e1p',
     'faq.title': 'C\u00e2u h\u1ecfi th\u01b0\u1eddng g\u1eb7p',
     'faq.q1': 'openzca c\u00f3 th\u1eadt s\u1ef1 mi\u1ec5n ph\u00ed kh\u00f4ng?',
@@ -1066,7 +1012,7 @@ var T = {
     'faq.q6': 'Y\u00eau c\u1ea7u h\u1ec7 th\u1ed1ng l\u00e0 g\u00ec?',
     'faq.a6': 'Y\u00eau c\u1ea7u Node.js 18 tr\u1edf l\u00ean. openzca ch\u1ea1y tr\u00ean macOS, Linux v\u00e0 Windows. Kh\u00f4ng c\u1ea7n th\u00eam ph\u1ee5 thu\u1ed9c , m\u1ecdi th\u1ee9 \u0111\u01b0\u1ee3c c\u00e0i qua npm.',
     'faq.q7': 'openzca kh\u00e1c g\u00ec v\u1edbi zca-cli?',
-    'faq.a7': 'zca-cli y\u00eau c\u1ea7u mua license v\u1edbi quy tr\u00ecnh k\u00edch ho\u1ea1t nhi\u1ec1u b\u01b0\u1edbc (m\u00e3 h\u1ed7 tr\u1ee3, chuy\u1ec3n kho\u1ea3n, g\u1eafn thi\u1ebft b\u1ecb). openzca ho\u00e0n to\u00e0n mi\u1ec5n ph\u00ed, m\u00e3 ngu\u1ed3n m\u1edf (gi\u1ea5y ph\u00e9p MIT), v\u00e0 ho\u1ea1t \u0111\u1ed9ng ngay sau khi c\u00e0i \u0111\u1eb7t, kh\u00f4ng c\u1ea7n license key, kh\u00f4ng c\u1ea7n k\u00edch ho\u1ea1t, kh\u00f4ng gi\u1edbi h\u1ea1n thi\u1ebft b\u1ecb. C\u00f9ng t\u00ednh n\u0103ng c\u1ed1t l\u00f5i v\u00e0 h\u01a1n th\u1ebf: nh\u1eafn tin, truy\u1ec1n file, nh\u00f3m, b\u1ea1n b\u00e8, h\u1ed3 s\u01a1, l\u1eafng nghe th\u1eddi gian th\u1ef1c v\u1edbi cache media v\u00e0 debug logging. C\u1ea3 \"openzca\" v\u00e0 \"zca\" \u0111\u1ec1u d\u00f9ng \u0111\u01b0\u1ee3c l\u00e0m t\u00ean l\u1ec7nh. M\u00e3 ngu\u1ed3n c\u00f4ng khai tr\u00ean GitHub \u0111\u1ec3 minh b\u1ea1ch v\u00e0 \u0111\u00f3ng g\u00f3p c\u1ed9ng \u0111\u1ed3ng.',
+    'faq.a7': 'zca-cli y\u00eau c\u1ea7u mua license v\u1edbi quy tr\u00ecnh k\u00edch ho\u1ea1t nhi\u1ec1u b\u01b0\u1edbc (m\u00e3 h\u1ed7 tr\u1ee3, chuy\u1ec3n kho\u1ea3n, g\u1eafn thi\u1ebft b\u1ecb). openzca ho\u00e0n to\u00e0n mi\u1ec5n ph\u00ed, m\u00e3 ngu\u1ed3n m\u1edf (gi\u1ea5y ph\u00e9p MIT), v\u00e0 ho\u1ea1t \u0111\u1ed9ng ngay sau khi c\u00e0i \u0111\u1eb7t, kh\u00f4ng c\u1ea7n license key, kh\u00f4ng c\u1ea7n k\u00edch ho\u1ea1t, kh\u00f4ng gi\u1edbi h\u1ea1n thi\u1ebft b\u1ecb. C\u00f9ng t\u00ednh n\u0103ng c\u1ed1t l\u00f5i v\u00e0 h\u01a1n th\u1ebf: \u0111\u1ecbnh d\u1ea1ng v\u0103n b\u1ea3n ki\u1ec3u Markdown v\u1edbi @mention, tr\u1ea3 l\u1eddi v\u00e0 ch\u1ec9nh s\u1eeda tin nh\u1eafn, kh\u1ea3o s\u00e1t nh\u00f3m, c\u01a1 s\u1edf d\u1eef li\u1ec7u SQLite n\u1ed9i b\u1ed9 \u0111\u1ec3 xem l\u1ecbch s\u1eed offline, ch\u1ebf \u0111\u1ed9 l\u1eafng nghe supervised v\u1edbi IPC v\u00e0 c\u1ea5u h\u00ecnh m\u1edf r\u1ed9ng. C\u1ea3 \"openzca\" v\u00e0 \"zca\" \u0111\u1ec1u d\u00f9ng \u0111\u01b0\u1ee3c l\u00e0m t\u00ean l\u1ec7nh. M\u00e3 ngu\u1ed3n c\u00f4ng khai tr\u00ean GitHub \u0111\u1ec3 minh b\u1ea1ch v\u00e0 \u0111\u00f3ng g\u00f3p c\u1ed9ng \u0111\u1ed3ng.',
     'disc.label': 'Mi\u1ec5n tr\u1eeb',
     'disc.title': 'Th\u00f4ng b\u00e1o ph\u00e1p l\u00fd quan tr\u1ecdng',
     'disc.heading': 'Tuy\u00ean b\u1ed1 mi\u1ec5n tr\u1eeb & Th\u00f4ng b\u00e1o ph\u00e1p l\u00fd',
@@ -1090,10 +1036,11 @@ var T = {
     'oss.cta2': 'Xem tr\u00ean npm',
     'footer.note': 'CLI Zalo mi\u1ec5n ph\u00ed, m\u00e3 ngu\u1ed3n m\u1edf cho m\u1ee5c \u0111\u00edch gi\u00e1o d\u1ee5c v\u00e0 nghi\u00ean c\u1ee9u c\u00e1 nh\u00e2n. Kh\u00f4ng li\u00ean k\u1ebft v\u1edbi Zalo hay T\u1eadp \u0111o\u00e0n VNG.',
     'footer.resources': 'T\u00e0i nguy\u00ean',
+    'footer.docs': 'T\u00e0i li\u1ec7u',
     'footer.issues': 'B\u00e1o c\u00e1o l\u1ed7i',
     'footer.community': 'C\u1ed9ng \u0111\u1ed3ng',
     'footer.discussions': 'Th\u1ea3o lu\u1eadn',
-    'footer.contribute': '\u0110\u00f3ng g\u00f3p',
+
     'footer.legal_title': 'Ph\u00e1p l\u00fd',
     'footer.terms': '\u0110i\u1ec1u kho\u1ea3n s\u1eed d\u1ee5ng',
     'footer.privacy': 'Ch\u00ednh s\u00e1ch b\u1ea3o m\u1eadt',
@@ -1174,7 +1121,7 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       if (entry.isIntersecting) entry.target.classList.add('visible');
     });
   }, { threshold: 0.1 });
-  document.querySelectorAll('.feature-card, .step, .faq-item, .integration-grid').forEach(function(el) {
+  document.querySelectorAll('.feature-card, .step, .faq-item').forEach(function(el) {
     observer.observe(el);
   });
 }

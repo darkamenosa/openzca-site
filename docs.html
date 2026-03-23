@@ -1,0 +1,1344 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Documentation - openzca CLI Reference</title>
+  <meta name="description" content="Complete command reference for openzca, the free open-source Zalo CLI. Covers authentication, messaging, groups, friends, profiles, local database, real-time listener, text formatting, and environment variables.">
+  <meta name="theme-color" content="#0F172A">
+  <link rel="canonical" href="https://openzca.com/docs.html">
+  <meta name="robots" content="index,follow">
+  <meta property="og:title" content="openzca Documentation - CLI Command Reference">
+  <meta property="og:description" content="Complete command reference for openzca, the free open-source Zalo CLI.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://openzca.com/docs.html">
+  <meta property="og:site_name" content="openzca">
+  <meta property="og:image" content="https://openzca.com/og-image.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-alt: #1e293b;
+      --panel: #1e293b;
+      --panel-hover: #334155;
+      --text: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --border: #334155;
+      --accent: #38bdf8;
+      --accent-2: #818cf8;
+      --accent-glow: rgba(56, 189, 248, 0.15);
+      --green: #4ade80;
+      --yellow: #facc15;
+      --orange: #fb923c;
+      --font: 'IBM Plex Sans', ui-sans-serif, -apple-system, system-ui, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --sidebar-w: 260px;
+      --nav-h: 64px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 24px); }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 24px; height: var(--nav-h);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      font-weight: 700; font-size: 20px; color: var(--text);
+      text-decoration: none; display: flex; align-items: center; gap: 8px;
+    }
+    .nav-brand span { color: var(--accent); }
+    .nav-links {
+      display: flex; align-items: center; gap: 24px; list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-secondary); text-decoration: none;
+      font-size: 14px; font-weight: 500; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active { color: var(--accent); }
+    .nav-mobile-toggle {
+      display: none; background: none; border: none;
+      color: var(--text); cursor: pointer; padding: 4px;
+    }
+    .nav-mobile-toggle svg { width: 24px; height: 24px; }
+
+    /* ── DOCS LAYOUT ── */
+    .docs-layout {
+      display: flex;
+      max-width: 1400px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding-top: var(--nav-h);
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      min-width: var(--sidebar-w);
+      position: sticky;
+      top: var(--nav-h);
+      height: calc(100vh - var(--nav-h));
+      overflow-y: auto;
+      padding: 24px 0 40px 24px;
+      border-right: 1px solid var(--border);
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .sidebar-section { margin-bottom: 20px; }
+    .sidebar-heading {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-secondary);
+      margin-bottom: 8px; padding-right: 16px;
+    }
+    .sidebar-link {
+      display: block; padding: 5px 16px 5px 0; font-size: 13px;
+      color: var(--text-secondary); text-decoration: none;
+      border-left: 2px solid transparent;
+      padding-left: 12px; margin-left: -2px;
+      transition: all 0.15s;
+    }
+    .sidebar-link:hover { color: var(--text); }
+    .sidebar-link.active {
+      color: var(--accent); border-left-color: var(--accent);
+      background: var(--accent-glow);
+    }
+    .sidebar-link.nested { padding-left: 24px; font-size: 12px; }
+
+    /* Mobile sidebar toggle */
+    .sidebar-mobile-toggle {
+      display: none; position: fixed; bottom: 24px; right: 24px; z-index: 99;
+      width: 48px; height: 48px; border-radius: 12px;
+      background: var(--accent); color: var(--bg); border: none;
+      cursor: pointer; box-shadow: 0 4px 20px rgba(56, 189, 248, 0.4);
+      font-size: 20px; align-items: center; justify-content: center;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .docs-main {
+      flex: 1;
+      min-width: 0;
+      padding: 40px 48px 80px;
+    }
+
+    .docs-main h1 {
+      font-size: 36px; font-weight: 700; margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    .docs-hero-desc {
+      font-size: 16px; color: var(--text-secondary);
+      margin-bottom: 32px; max-width: 600px; line-height: 1.7;
+    }
+    .docs-main h2 {
+      font-size: 24px; font-weight: 700; margin-top: 56px; margin-bottom: 16px;
+      padding-bottom: 10px; border-bottom: 1px solid var(--border);
+      letter-spacing: -0.01em;
+    }
+    .docs-main h2 .cmd-prefix {
+      color: var(--accent); font-family: var(--mono); font-size: 20px;
+    }
+    .docs-main h3 {
+      font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 12px;
+      color: var(--text);
+    }
+    .docs-main h4 {
+      font-size: 15px; font-weight: 600; margin-top: 24px; margin-bottom: 8px;
+    }
+    .docs-main p {
+      color: var(--text-secondary); font-size: 15px;
+      line-height: 1.7; margin-bottom: 16px;
+    }
+    .docs-main a { color: var(--accent); text-decoration: none; }
+    .docs-main a:hover { text-decoration: underline; }
+    .docs-main ul, .docs-main ol {
+      color: var(--text-secondary); font-size: 15px;
+      padding-left: 24px; margin-bottom: 16px; line-height: 1.7;
+    }
+    .docs-main li { margin-bottom: 4px; }
+    .docs-main li code { font-size: 13px; }
+
+    /* ── INLINE CODE ── */
+    code {
+      font-family: var(--mono); font-size: 13px;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 2px 7px; border-radius: 4px; color: var(--accent);
+    }
+
+    /* ── CODE BLOCKS ── */
+    .code-block {
+      background: #0b1120; border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden; margin-bottom: 20px;
+    }
+    .code-header {
+      background: #1a1f2e; padding: 8px 16px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 12px; color: var(--text-secondary);
+    }
+    .copy-btn {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--text-secondary); padding: 3px 10px; border-radius: 5px;
+      font-size: 11px; cursor: pointer; font-family: var(--font); transition: all 0.2s;
+    }
+    .copy-btn:hover { color: var(--text); border-color: var(--text-secondary); }
+    .code-body {
+      padding: 14px 18px; font-family: var(--mono);
+      font-size: 13px; line-height: 1.8; overflow-x: auto;
+      color: var(--text);
+    }
+    .code-body .comment { color: #475569; }
+    .code-body .prompt { color: var(--green); }
+    .code-body .flag { color: var(--orange); }
+    .code-body .string { color: var(--green); }
+    .code-body .output { color: var(--text-secondary); }
+
+    /* ── COMMAND TABLE ── */
+    .cmd-table {
+      width: 100%; border-collapse: collapse; margin-bottom: 24px;
+      font-size: 14px;
+    }
+    .cmd-table th {
+      text-align: left; padding: 10px 16px; font-size: 12px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--text-secondary); border-bottom: 2px solid var(--border);
+      background: var(--bg-alt);
+    }
+    .cmd-table td {
+      padding: 10px 16px; border-bottom: 1px solid var(--border);
+      color: var(--text-secondary); vertical-align: top;
+    }
+    .cmd-table td:first-child { white-space: nowrap; }
+    .cmd-table td code {
+      font-size: 12.5px; background: rgba(56, 189, 248, 0.08);
+      padding: 2px 6px; border-radius: 3px;
+    }
+    .cmd-table tr:hover td { background: rgba(56, 189, 248, 0.03); }
+    .cmd-table .alias {
+      font-size: 11px; color: var(--accent-2);
+      font-family: var(--mono);
+    }
+
+    /* ── OPTION PILLS ── */
+    .opt-list { margin-bottom: 20px; }
+    .opt-item {
+      display: flex; gap: 16px; padding: 8px 0;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+      font-size: 14px;
+    }
+    .opt-item:last-child { border-bottom: none; }
+    .opt-flag {
+      min-width: 200px; font-family: var(--mono); font-size: 13px;
+      color: var(--orange);
+    }
+    .opt-desc { color: var(--text-secondary); }
+
+    /* ── BADGES ── */
+    .badge-required {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      padding: 1px 6px; border-radius: 4px;
+      background: rgba(248, 113, 113, 0.15); color: #f87171;
+      text-transform: uppercase; letter-spacing: 0.05em; vertical-align: middle;
+    }
+    .badge-default {
+      display: inline-block; font-size: 10px; font-weight: 600;
+      padding: 1px 6px; border-radius: 4px;
+      background: rgba(148, 163, 184, 0.15); color: var(--text-secondary);
+      font-family: var(--mono); vertical-align: middle;
+    }
+
+    /* ── CALLOUT ── */
+    .callout {
+      padding: 16px 20px; border-radius: 10px; margin-bottom: 20px;
+      font-size: 14px; line-height: 1.6;
+    }
+    .callout-info {
+      background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.2);
+      color: var(--text-secondary);
+    }
+    .callout-info strong { color: var(--accent); }
+    .callout-warn {
+      background: rgba(250, 204, 21, 0.06); border: 1px solid rgba(250, 204, 21, 0.15);
+      color: var(--text-secondary);
+    }
+    .callout-warn strong { color: var(--yellow); }
+
+    /* ── SECTION DIVIDER ── */
+    .section-divider {
+      height: 1px; background: var(--border); margin: 48px 0;
+    }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 40px 24px; }
+    .footer-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: flex-start;
+      flex-wrap: wrap; gap: 32px;
+    }
+    .footer-brand { font-weight: 700; font-size: 18px; margin-bottom: 8px; }
+    .footer-brand span { color: var(--accent); }
+    .footer-note {
+      color: var(--text-secondary); font-size: 13px;
+      max-width: 320px; line-height: 1.6;
+    }
+    .footer-col h4 { font-size: 14px; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+    .footer-col a {
+      display: block; color: var(--text-secondary); text-decoration: none;
+      font-size: 14px; margin-bottom: 8px; transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--text); }
+    .footer-bottom {
+      max-width: 1200px; margin: 24px auto 0; padding-top: 24px;
+      border-top: 1px solid var(--border); font-size: 13px;
+      color: var(--text-secondary); line-height: 1.7;
+    }
+    .footer-bottom-row {
+      display: flex; justify-content: space-between; flex-wrap: wrap;
+      gap: 16px; margin-bottom: 12px;
+    }
+    .footer-legal { font-size: 12px; color: #94a3b8; line-height: 1.6; max-width: 800px; }
+
+    /* ── FORMAT TABLE ── */
+    .fmt-table {
+      width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 14px;
+    }
+    .fmt-table th {
+      text-align: left; padding: 10px 16px; font-size: 12px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--text-secondary); border-bottom: 2px solid var(--border);
+      background: var(--bg-alt);
+    }
+    .fmt-table td {
+      padding: 10px 16px; border-bottom: 1px solid var(--border);
+      color: var(--text-secondary); font-size: 14px;
+    }
+    .fmt-table td:first-child {
+      font-family: var(--mono); font-size: 13px; color: var(--green);
+      white-space: nowrap;
+    }
+
+    /* ── ENV TABLE ── */
+    .env-table {
+      width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 13px;
+    }
+    .env-table th {
+      text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--text-secondary); border-bottom: 2px solid var(--border);
+      background: var(--bg-alt);
+    }
+    .env-table td {
+      padding: 8px 12px; border-bottom: 1px solid var(--border);
+      color: var(--text-secondary); vertical-align: top;
+    }
+    .env-table td:first-child {
+      font-family: var(--mono); font-size: 12px; color: var(--orange);
+      white-space: nowrap;
+    }
+    .env-table td:nth-child(2) {
+      font-family: var(--mono); font-size: 12px; color: var(--text-secondary);
+      white-space: nowrap;
+    }
+    .env-group-header td {
+      font-weight: 700; color: var(--text) !important;
+      background: rgba(56, 189, 248, 0.05);
+      font-family: var(--font) !important; font-size: 13px !important;
+      padding-top: 14px !important;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      .sidebar {
+        display: none;
+        position: fixed; top: var(--nav-h); left: 0; bottom: 0;
+        z-index: 90; background: var(--bg);
+        border-right: 1px solid var(--border);
+        width: 280px;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.4);
+      }
+      .sidebar.open { display: block; }
+      .sidebar-mobile-toggle { display: flex; }
+      .docs-main { padding: 32px 20px 80px; }
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column; position: absolute;
+        top: var(--nav-h); left: 0; right: 0;
+        background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px);
+        padding: 16px 24px; border-bottom: 1px solid var(--border); gap: 16px;
+      }
+      .nav-mobile-toggle { display: block; }
+      .opt-item { flex-direction: column; gap: 4px; }
+      .opt-flag { min-width: auto; }
+      .cmd-table td:first-child { white-space: normal; }
+      .env-table td:first-child { white-space: normal; }
+    }
+
+    /* ── SIDEBAR OVERLAY ── */
+    .sidebar-overlay {
+      display: none; position: fixed; inset: 0; z-index: 89;
+      background: rgba(0, 0, 0, 0.5);
+    }
+    .sidebar-overlay.open { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-brand"><span>&gt;_</span> openzca</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/#install">Installation</a></li>
+      <li><a href="/docs.html" class="active">Docs</a></li>
+      <li><a href="/#faq">FAQ</a></li>
+      <li><a href="https://github.com/darkamenosa/openzca" target="_blank" rel="noopener">GitHub</a></li>
+    </ul>
+    <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══ DOCS LAYOUT ═══ -->
+<div class="docs-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-heading">Getting Started</div>
+      <a class="sidebar-link" href="#installation">Installation</a>
+      <a class="sidebar-link" href="#quick-start">Quick Start</a>
+      <a class="sidebar-link" href="#global-options">Global Options</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-heading">Commands</div>
+      <a class="sidebar-link" href="#account">account</a>
+      <a class="sidebar-link" href="#auth">auth</a>
+      <a class="sidebar-link" href="#msg">msg</a>
+      <a class="sidebar-link" href="#group">group</a>
+      <a class="sidebar-link nested" href="#group-poll">poll</a>
+      <a class="sidebar-link" href="#friend">friend</a>
+      <a class="sidebar-link" href="#me">me</a>
+      <a class="sidebar-link" href="#db">db</a>
+      <a class="sidebar-link nested" href="#db-sync">sync</a>
+      <a class="sidebar-link" href="#listen">listen</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-heading">Reference</div>
+      <a class="sidebar-link" href="#text-formatting">Text Formatting</a>
+      <a class="sidebar-link" href="#env-vars">Environment Variables</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Main Content -->
+  <main class="docs-main">
+
+    <h1>Documentation</h1>
+    <p class="docs-hero-desc">Complete command reference for the openzca CLI. Both <code>openzca</code> and <code>zca</code> work as the command name.</p>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- GETTING STARTED                      -->
+    <!-- ════════════════════════════════════ -->
+
+    <h2 id="installation">Installation</h2>
+    <p>Requires <strong>Node.js 18+</strong>. Works on macOS, Linux, and Windows.</p>
+
+    <div class="code-block">
+      <div class="code-header"><span>npm (recommended)</span><button class="copy-btn" data-copy="npm i -g openzca@latest">Copy</button></div>
+      <div class="code-body"><span class="prompt">$</span> npm i -g openzca@latest</div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span>macOS / Linux</span><button class="copy-btn" data-copy="curl -fsSL https://openzca.com/install.sh | bash">Copy</button></div>
+      <div class="code-body"><span class="prompt">$</span> curl -fsSL https://openzca.com/install.sh | bash</div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span>Windows (PowerShell)</span><button class="copy-btn" data-copy="irm https://openzca.com/install.ps1 | iex">Copy</button></div>
+      <div class="code-body"><span class="prompt">PS&gt;</span> irm https://openzca.com/install.ps1 | iex</div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span>Run without installing</span><button class="copy-btn" data-copy="npx openzca --help">Copy</button></div>
+      <div class="code-body"><span class="prompt">$</span> npx openzca --help</div>
+    </div>
+
+    <h2 id="quick-start">Quick Start</h2>
+    <div class="code-block">
+      <div class="code-header"><span>Terminal</span></div>
+      <div class="code-body"><span class="comment"># Login with QR code</span>
+<span class="prompt">$</span> openzca auth login
+
+<span class="comment"># Send a message</span>
+<span class="prompt">$</span> openzca msg send 123456 <span class="string">"Hello from CLI!"</span>
+
+<span class="comment"># Send a formatted message to a group</span>
+<span class="prompt">$</span> openzca msg send GID <span class="string">"**bold** and *italic* with @Alice"</span> <span class="flag">-g</span>
+
+<span class="comment"># Listen for incoming messages</span>
+<span class="prompt">$</span> openzca listen <span class="flag">--webhook</span> http://localhost:3000/hook
+
+<span class="comment"># Enable local database and sync</span>
+<span class="prompt">$</span> openzca db enable
+<span class="prompt">$</span> openzca db sync</div>
+    </div>
+
+    <h2 id="global-options">Global Options</h2>
+    <p>These options can be used with any command.</p>
+    <div class="opt-list">
+      <div class="opt-item">
+        <span class="opt-flag">-p, --profile &lt;name&gt;</span>
+        <span class="opt-desc">Select a named profile for this command</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--debug</span>
+        <span class="opt-desc">Enable debug logging</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--debug-file &lt;path&gt;</span>
+        <span class="opt-desc">Debug log file path</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">-V, --version</span>
+        <span class="opt-desc">Output the version number</span>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- ACCOUNT                              -->
+    <!-- ════════════════════════════════════ -->
+
+    <h2 id="account"><span class="cmd-prefix">account</span> &mdash; Multi-account profile management</h2>
+    <p>Manage multiple Zalo accounts with named profiles. Each profile stores its own credentials, cache, and database.</p>
+
+    <table class="cmd-table">
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>account list</code> <span class="alias">ls, l</span></td><td>List all account profiles</td></tr>
+        <tr><td><code>account current</code> <span class="alias">whoami</span></td><td>Show current active profile</td></tr>
+        <tr><td><code>account switch &lt;name&gt;</code> <span class="alias">use</span></td><td>Set default profile</td></tr>
+        <tr><td><code>account add [name]</code> <span class="alias">new</span></td><td>Create a new profile (default: &quot;default&quot;)</td></tr>
+        <tr><td><code>account label &lt;name&gt; &lt;label&gt;</code></td><td>Set a display label for a profile</td></tr>
+        <tr><td><code>account remove &lt;name&gt;</code> <span class="alias">rm</span></td><td>Remove a profile and its data</td></tr>
+      </tbody>
+    </table>
+
+    <div class="code-block">
+      <div class="code-header"><span>Examples</span></div>
+      <div class="code-body"><span class="comment"># Create work and personal profiles</span>
+<span class="prompt">$</span> openzca account add work
+<span class="prompt">$</span> openzca account add personal
+
+<span class="comment"># Switch to work profile</span>
+<span class="prompt">$</span> openzca account switch work
+
+<span class="comment"># Run a single command with a specific profile</span>
+<span class="prompt">$</span> openzca <span class="flag">--profile</span> personal msg send 123 <span class="string">"Hi"</span></div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- AUTH                                 -->
+    <!-- ════════════════════════════════════ -->
+
+    <h2 id="auth"><span class="cmd-prefix">auth</span> &mdash; Authentication &amp; cache</h2>
+    <p>Login, logout, and manage the local friends/groups cache.</p>
+
+    <table class="cmd-table">
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>auth login</code></td><td>Login with QR code</td></tr>
+        <tr><td><code>auth login-cred [file]</code> <span class="alias">login-creds</span></td><td>Login using a credential JSON file</td></tr>
+        <tr><td><code>auth logout</code></td><td>Remove saved credentials from active profile</td></tr>
+        <tr><td><code>auth status</code></td><td>Show login status</td></tr>
+        <tr><td><code>auth cache-refresh</code></td><td>Refresh friends/groups cache from server</td></tr>
+        <tr><td><code>auth cache-info</code></td><td>Show cache metadata (last updated, counts)</td></tr>
+        <tr><td><code>auth cache-clear</code></td><td>Clear local cache</td></tr>
+      </tbody>
+    </table>
+
+    <h3>auth login options</h3>
+    <div class="opt-list">
+      <div class="opt-item">
+        <span class="opt-flag">-q, --qr-path &lt;path&gt;</span>
+        <span class="opt-desc">Save QR code image to file</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--open-qr</span>
+        <span class="opt-desc">Open QR image with system viewer</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--qr-base64</span>
+        <span class="opt-desc">Output QR as base64 data URL and return immediately (integration mode)</span>
+      </div>
+    </div>
+
+    <div class="callout callout-info">
+      <strong>Inline QR rendering</strong> is supported in Ghostty, Kitty, WezTerm, and iTerm2 via the Kitty Graphics Protocol or iTerm2 inline images. Other terminals get an ASCII QR fallback.
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- MSG                                  -->
+    <!-- ════════════════════════════════════ -->
+
+    <h2 id="msg"><span class="cmd-prefix">msg</span> &mdash; Messaging</h2>
+    <p>Send text, media, files, reactions, and manage conversations. Use <code>-g</code> to target group threads.</p>
+
+    <table class="cmd-table">
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>msg send &lt;threadId&gt; &lt;message&gt;</code></td><td>Send text with formatting and @mentions</td></tr>
+        <tr><td><code>msg image &lt;threadId&gt; [file]</code></td><td>Send image(s) from file or URL</td></tr>
+        <tr><td><code>msg video &lt;threadId&gt; [file]</code></td><td>Send video(s); single .mp4 uses native video mode</td></tr>
+        <tr><td><code>msg voice &lt;threadId&gt; [file]</code></td><td>Send voice message (.aac, .mp3, .m4a, .wav, .ogg)</td></tr>
+        <tr><td><code>msg sticker &lt;threadId&gt; &lt;stickerId&gt;</code></td><td>Send a sticker</td></tr>
+        <tr><td><code>msg link &lt;threadId&gt; &lt;url&gt;</code></td><td>Send a link preview</td></tr>
+        <tr><td><code>msg card &lt;threadId&gt; &lt;contactId&gt;</code></td><td>Send a contact card</td></tr>
+        <tr><td><code>msg react &lt;msgId&gt; &lt;cliMsgId&gt; &lt;threadId&gt; &lt;reaction&gt;</code></td><td>React to a message</td></tr>
+        <tr><td><code>msg typing &lt;threadId&gt;</code></td><td>Send typing indicator</td></tr>
+        <tr><td><code>msg forward &lt;message&gt; &lt;targets...&gt;</code></td><td>Forward text to multiple targets</td></tr>
+        <tr><td><code>msg delete &lt;msgId&gt; &lt;cliMsgId&gt; &lt;uidFrom&gt; &lt;threadId&gt;</code></td><td>Delete a message</td></tr>
+        <tr><td><code>msg undo &lt;msgId&gt; &lt;cliMsgId&gt; &lt;threadId&gt;</code></td><td>Recall your sent message</td></tr>
+        <tr><td><code>msg edit &lt;msgId&gt; &lt;cliMsgId&gt; &lt;threadId&gt; &lt;message&gt;</code></td><td>Edit a message (undo + resend)</td></tr>
+        <tr><td><code>msg upload &lt;arg1&gt; [arg2]</code></td><td>Upload and send file(s)</td></tr>
+        <tr><td><code>msg recent &lt;threadId&gt;</code></td><td>List recent messages</td></tr>
+        <tr><td><code>msg pin &lt;threadId&gt;</code></td><td>Pin a conversation</td></tr>
+        <tr><td><code>msg unpin &lt;threadId&gt;</code></td><td>Unpin a conversation</td></tr>
+        <tr><td><code>msg list-pins</code></td><td>List pinned conversations</td></tr>
+        <tr><td><code>msg member-info &lt;userId&gt;</code></td><td>Get member/user profile info</td></tr>
+      </tbody>
+    </table>
+
+    <h3>msg send options</h3>
+    <div class="opt-list">
+      <div class="opt-item">
+        <span class="opt-flag">-g, --group</span>
+        <span class="opt-desc">Send to a group thread</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--raw</span>
+        <span class="opt-desc">Skip Markdown formatting and @mention resolution</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--reply-id &lt;id&gt;</span>
+        <span class="opt-desc">Quote-reply to a message by its stored ID from the local DB</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--reply-message &lt;json&gt;</span>
+        <span class="opt-desc">Quote-reply using a raw message.data object or listen --raw payload</span>
+      </div>
+    </div>
+
+    <h3>msg image / video / voice / upload options</h3>
+    <div class="opt-list">
+      <div class="opt-item">
+        <span class="opt-flag">-u, --url &lt;url&gt;</span>
+        <span class="opt-desc">Send from URL (repeatable for multiple files)</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">-m, --message &lt;message&gt;</span>
+        <span class="opt-desc">Caption text (image and video only)</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--thumbnail &lt;pathOrUrl&gt;</span>
+        <span class="opt-desc">Custom video thumbnail (video only)</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">-g, --group</span>
+        <span class="opt-desc">Send to a group thread</span>
+      </div>
+    </div>
+
+    <h3>msg recent options</h3>
+    <div class="opt-list">
+      <div class="opt-item">
+        <span class="opt-flag">-n, --count &lt;count&gt;</span>
+        <span class="opt-desc">Number of messages to fetch <span class="badge-default">20</span></span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--source &lt;source&gt;</span>
+        <span class="opt-desc">Data source: <code>live</code>, <code>db</code>, or <code>auto</code> <span class="badge-default">live</span></span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">-j, --json</span>
+        <span class="opt-desc">Output as JSON</span>
+      </div>
+    </div>
+
+    <h3>msg delete options</h3>
+    <div class="opt-list">
+      <div class="opt-item">
+        <span class="opt-flag">--only-me</span>
+        <span class="opt-desc">Delete only for yourself</span>
+      </div>
+    </div>
+
+    <div class="callout callout-info">
+      <strong>Reaction values:</strong> Use emoji directly or one of the named enums: <code>heart</code>, <code>like</code>, <code>haha</code>, <code>wow</code>, <code>cry</code>, <code>angry</code>.
+    </div>
+
+    <div class="code-block">
+      <div class="code-header"><span>Examples</span></div>
+      <div class="code-body"><span class="comment"># Send formatted text to a group with @mention</span>
+<span class="prompt">$</span> openzca msg send GID <span class="string">"**Hello** @Alice, check this out!"</span> <span class="flag">-g</span>
+
+<span class="comment"># Send image from URL with caption</span>
+<span class="prompt">$</span> openzca msg image 123456 <span class="flag">-u</span> https://example.com/photo.jpg <span class="flag">-m</span> <span class="string">"Look at this"</span>
+
+<span class="comment"># Reply to a message from the local database</span>
+<span class="prompt">$</span> openzca msg send GID <span class="string">"I agree!"</span> <span class="flag">-g --reply-id</span> abc123
+
+<span class="comment"># Upload a file to a group</span>
+<span class="prompt">$</span> openzca msg upload GID ./report.pdf <span class="flag">-g</span></div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- GROUP                                -->
+    <!-- ════════════════════════════════════ -->
+
+    <h2 id="group"><span class="cmd-prefix">group</span> &mdash; Group management</h2>
+    <p>Create groups, manage members, handle invite links, run polls, and configure group settings.</p>
+
+    <table class="cmd-table">
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>group list</code></td><td>List all groups</td></tr>
+        <tr><td><code>group info &lt;groupId&gt;</code></td><td>Get group details</td></tr>
+        <tr><td><code>group members &lt;groupId&gt;</code></td><td>List group members</td></tr>
+        <tr><td><code>group create &lt;name&gt; &lt;members...&gt;</code></td><td>Create a new group</td></tr>
+        <tr><td><code>group rename &lt;groupId&gt; &lt;name&gt;</code></td><td>Rename a group</td></tr>
+        <tr><td><code>group avatar &lt;groupId&gt; &lt;file&gt;</code></td><td>Change group avatar</td></tr>
+        <tr><td><code>group settings &lt;groupId&gt;</code></td><td>Update group settings</td></tr>
+        <tr><td><code>group add &lt;groupId&gt; &lt;userIds...&gt;</code></td><td>Add members to group</td></tr>
+        <tr><td><code>group remove &lt;groupId&gt; &lt;userIds...&gt;</code></td><td>Remove members from group</td></tr>
+        <tr><td><code>group add-deputy &lt;groupId&gt; &lt;userId&gt;</code></td><td>Promote member to deputy</td></tr>
+        <tr><td><code>group remove-deputy &lt;groupId&gt; &lt;userId&gt;</code></td><td>Demote deputy</td></tr>
+        <tr><td><code>group transfer &lt;groupId&gt; &lt;newOwnerId&gt;</code></td><td>Transfer group ownership</td></tr>
+        <tr><td><code>group block &lt;groupId&gt; &lt;userId&gt;</code></td><td>Block a member</td></tr>
+        <tr><td><code>group unblock &lt;groupId&gt; &lt;userId&gt;</code></td><td>Unblock a member</td></tr>
+        <tr><td><code>group blocked &lt;groupId&gt;</code></td><td>List blocked members</td></tr>
+        <tr><td><code>group enable-link &lt;groupId&gt;</code></td><td>Enable invite link</td></tr>
+        <tr><td><code>group disable-link &lt;groupId&gt;</code></td><td>Disable invite link</td></tr>
+        <tr><td><code>group link-detail &lt;groupId&gt;</code></td><td>Get invite link details</td></tr>
+        <tr><td><code>group join-link &lt;linkId&gt;</code></td><td>Join a group via invite link</td></tr>
+        <tr><td><code>group pending &lt;groupId&gt;</code></td><td>List pending join requests</td></tr>
+        <tr><td><code>group review &lt;groupId&gt; &lt;userId&gt; &lt;action&gt;</code></td><td>Approve or deny join request</td></tr>
+        <tr><td><code>group leave &lt;groupId&gt;</code></td><td>Leave a group</td></tr>
+        <tr><td><code>group disperse &lt;groupId&gt;</code></td><td>Disperse (disband) a group</td></tr>
+      </tbody>
+    </table>
+
+    <h3>group settings options</h3>
+    <div class="opt-list">
+      <div class="opt-item">
+        <span class="opt-flag">--lock-name / --unlock-name</span>
+        <span class="opt-desc">Lock or unlock group name changes</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--sign-admin / --no-sign-admin</span>
+        <span class="opt-desc">Enable or disable admin signature</span>
+      </div>
+    </div>
+
+    <h3 id="group-poll">group poll</h3>
+    <p>Create and manage polls within groups.</p>
+
+    <table class="cmd-table">
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>group poll create &lt;groupId&gt;</code></td><td>Create a poll</td></tr>
+        <tr><td><code>group poll detail &lt;pollId&gt;</code></td><td>Get poll details and results</td></tr>
+        <tr><td><code>group poll vote &lt;pollId&gt;</code></td><td>Vote on a poll</td></tr>
+        <tr><td><code>group poll lock &lt;pollId&gt;</code></td><td>Close a poll</td></tr>
+        <tr><td><code>group poll share &lt;pollId&gt;</code></td><td>Share a poll</td></tr>
+      </tbody>
+    </table>
+
+    <h3>group poll create options</h3>
+    <div class="opt-list">
+      <div class="opt-item">
+        <span class="opt-flag">-q, --question &lt;text&gt;</span>
+        <span class="opt-desc">Poll question <span class="badge-required">required</span></span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">-o, --option &lt;text&gt;</span>
+        <span class="opt-desc">Poll option (repeatable, min 2) <span class="badge-required">required</span></span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--multi</span>
+        <span class="opt-desc">Allow multiple selections</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--allow-add-option</span>
+        <span class="opt-desc">Allow members to add options</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--hide-vote-preview</span>
+        <span class="opt-desc">Hide real-time vote counts</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--anonymous</span>
+        <span class="opt-desc">Anonymous voting</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--expire-ms &lt;ms&gt;</span>
+        <span class="opt-desc">Auto-close after N milliseconds</span>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header"><span>Examples</span></div>
+      <div class="code-body"><span class="comment"># Create a poll</span>
+<span class="prompt">$</span> openzca group poll create GID <span class="flag">-q</span> <span class="string">"Lunch spot?"</span> <span class="flag">-o</span> <span class="string">"Pizza"</span> <span class="flag">-o</span> <span class="string">"Sushi"</span> <span class="flag">-o</span> <span class="string">"Pho"</span> <span class="flag">--multi</span>
+
+<span class="comment"># Vote on a poll</span>
+<span class="prompt">$</span> openzca group poll vote POLL_ID <span class="flag">-o</span> 0 <span class="flag">-o</span> 2</div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- FRIEND                               -->
+    <!-- ════════════════════════════════════ -->
+
+    <h2 id="friend"><span class="cmd-prefix">friend</span> &mdash; Friend management</h2>
+    <p>Search users, manage friend requests, aliases, and blocking.</p>
+
+    <table class="cmd-table">
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>friend list</code></td><td>List all friends</td></tr>
+        <tr><td><code>friend find &lt;query&gt;</code></td><td>Find user by phone, username, or name</td></tr>
+        <tr><td><code>friend online</code></td><td>List online friends</td></tr>
+        <tr><td><code>friend recommendations</code></td><td>Get friend recommendations</td></tr>
+        <tr><td><code>friend add &lt;userId&gt;</code></td><td>Send friend request</td></tr>
+        <tr><td><code>friend accept &lt;userId&gt;</code></td><td>Accept friend request</td></tr>
+        <tr><td><code>friend reject &lt;userId&gt;</code></td><td>Reject friend request</td></tr>
+        <tr><td><code>friend cancel &lt;userId&gt;</code></td><td>Cancel sent friend request</td></tr>
+        <tr><td><code>friend sent</code></td><td>List sent friend requests</td></tr>
+        <tr><td><code>friend request-status &lt;userId&gt;</code></td><td>Check friend request status</td></tr>
+        <tr><td><code>friend remove &lt;userId&gt;</code></td><td>Remove a friend</td></tr>
+        <tr><td><code>friend alias &lt;userId&gt; &lt;alias&gt;</code></td><td>Set display alias for a friend</td></tr>
+        <tr><td><code>friend remove-alias &lt;userId&gt;</code></td><td>Remove alias</td></tr>
+        <tr><td><code>friend aliases</code></td><td>List all aliases</td></tr>
+        <tr><td><code>friend block &lt;userId&gt;</code></td><td>Block a user</td></tr>
+        <tr><td><code>friend unblock &lt;userId&gt;</code></td><td>Unblock a user</td></tr>
+        <tr><td><code>friend block-feed &lt;userId&gt;</code></td><td>Block user from viewing your feed</td></tr>
+        <tr><td><code>friend unblock-feed &lt;userId&gt;</code></td><td>Unblock user from viewing your feed</td></tr>
+        <tr><td><code>friend boards &lt;conversationId&gt;</code></td><td>Get boards in a conversation</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Notable options</h3>
+    <div class="opt-list">
+      <div class="opt-item">
+        <span class="opt-flag">-j, --json</span>
+        <span class="opt-desc">Output as JSON (available on list, find, online, recommendations, sent, aliases, boards)</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">-m, --message &lt;text&gt;</span>
+        <span class="opt-desc">Custom message for friend add <span class="badge-default">"Hello!"</span></span>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- ME                                   -->
+    <!-- ════════════════════════════════════ -->
+
+    <h2 id="me"><span class="cmd-prefix">me</span> &mdash; Profile &amp; account</h2>
+    <p>View and update your Zalo profile, manage avatars, and set online status.</p>
+
+    <table class="cmd-table">
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>me info</code></td><td>Get your account info</td></tr>
+        <tr><td><code>me id</code></td><td>Get your user ID</td></tr>
+        <tr><td><code>me update</code></td><td>Update profile fields</td></tr>
+        <tr><td><code>me avatar &lt;file&gt;</code></td><td>Change profile avatar</td></tr>
+        <tr><td><code>me avatars</code></td><td>List avatar history</td></tr>
+        <tr><td><code>me delete-avatar &lt;id&gt;</code></td><td>Delete an avatar from history</td></tr>
+        <tr><td><code>me reuse-avatar &lt;id&gt;</code></td><td>Reuse a previous avatar</td></tr>
+        <tr><td><code>me status &lt;online|offline&gt;</code></td><td>Set online status</td></tr>
+        <tr><td><code>me last-online &lt;userId&gt;</code></td><td>Check when a user was last online</td></tr>
+      </tbody>
+    </table>
+
+    <h3>me update options</h3>
+    <div class="opt-list">
+      <div class="opt-item">
+        <span class="opt-flag">--name &lt;name&gt;</span>
+        <span class="opt-desc">Set display name</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--gender &lt;gender&gt;</span>
+        <span class="opt-desc">Set gender (<code>male</code> or <code>female</code>)</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--birthday &lt;date&gt;</span>
+        <span class="opt-desc">Set birthday (YYYY-MM-DD format)</span>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- DB                                   -->
+    <!-- ════════════════════════════════════ -->
+
+    <h2 id="db"><span class="cmd-prefix">db</span> &mdash; Local SQLite database</h2>
+    <p>Profile-scoped SQLite message persistence. Enable the database, sync data from the server, and query messages offline with time-range filters.</p>
+
+    <div class="callout callout-info">
+      <strong>Default path:</strong> <code>~/.openzca/profiles/&lt;profile&gt;/messages.sqlite</code>. Uses WAL mode for concurrent reads.
+    </div>
+
+    <h3>Database management</h3>
+    <table class="cmd-table">
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>db enable</code></td><td>Enable local SQLite persistence</td></tr>
+        <tr><td><code>db disable</code></td><td>Disable automatic DB persistence</td></tr>
+        <tr><td><code>db reset</code></td><td>Delete the local SQLite DB file</td></tr>
+        <tr><td><code>db status</code></td><td>Show DB status, message counts, and file path</td></tr>
+      </tbody>
+    </table>
+
+    <h3>db enable options</h3>
+    <div class="opt-list">
+      <div class="opt-item">
+        <span class="opt-flag">--path &lt;path&gt;</span>
+        <span class="opt-desc">Custom database file path</span>
+      </div>
+    </div>
+
+    <h3>db reset options</h3>
+    <div class="opt-list">
+      <div class="opt-item">
+        <span class="opt-flag">-y, --yes</span>
+        <span class="opt-desc">Skip confirmation prompt</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--drop-config</span>
+        <span class="opt-desc">Also remove the DB configuration</span>
+      </div>
+    </div>
+
+    <h3>Stored data queries</h3>
+    <table class="cmd-table">
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>db me info</code></td><td>Show stored self profile</td></tr>
+        <tr><td><code>db me id</code></td><td>Show stored self user ID</td></tr>
+        <tr><td><code>db group list</code></td><td>List groups in DB</td></tr>
+        <tr><td><code>db group info &lt;groupId&gt;</code></td><td>Show stored group info</td></tr>
+        <tr><td><code>db group members &lt;groupId&gt;</code></td><td>List stored group members</td></tr>
+        <tr><td><code>db group messages &lt;groupId&gt;</code></td><td>List stored messages for a group</td></tr>
+        <tr><td><code>db friend list</code></td><td>List friends in DB</td></tr>
+        <tr><td><code>db friend find &lt;query&gt;</code></td><td>Find stored friends by ID or name</td></tr>
+        <tr><td><code>db friend info &lt;userId&gt;</code></td><td>Show stored friend info</td></tr>
+        <tr><td><code>db friend messages &lt;userId&gt;</code></td><td>List stored DM messages</td></tr>
+        <tr><td><code>db chat list</code></td><td>List all chats in DB</td></tr>
+        <tr><td><code>db chat info &lt;chatId&gt;</code></td><td>Show stored chat info</td></tr>
+        <tr><td><code>db chat messages &lt;chatId&gt;</code></td><td>List stored chat messages</td></tr>
+        <tr><td><code>db message get &lt;id&gt;</code></td><td>Read one stored message by msgId, cliMsgId, or uid</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Message query options</h3>
+    <p>Available on <code>db group messages</code>, <code>db friend messages</code>, and <code>db chat messages</code>.</p>
+    <div class="opt-list">
+      <div class="opt-item">
+        <span class="opt-flag">--since &lt;duration&gt;</span>
+        <span class="opt-desc">Messages from the last N time units (e.g. <code>7d</code>, <code>24h</code>, <code>1d2h30m</code>)</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--from &lt;time&gt;</span>
+        <span class="opt-desc">Start time (ISO 8601, unix seconds/ms, or parseable date string)</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--until, --to &lt;time&gt;</span>
+        <span class="opt-desc">End time (same formats as --from)</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--limit &lt;count&gt;</span>
+        <span class="opt-desc">Maximum number of messages <span class="badge-default">20</span></span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--all</span>
+        <span class="opt-desc">Return all matching messages (no limit)</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--oldest-first</span>
+        <span class="opt-desc">Sort oldest first (default: newest first)</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">-j, --json</span>
+        <span class="opt-desc">Output as JSON</span>
+      </div>
+    </div>
+
+    <div class="callout callout-info">
+      <strong>Time filter formats:</strong> Relative durations (<code>7m</code>, <code>24h</code>, <code>1d</code>, <code>2w</code>, <code>1d2h30m</code>), ISO timestamps (<code>2026-03-21T10:00:00+07:00</code>), Unix seconds or milliseconds, or any string parseable by <code>Date.parse()</code>.
+    </div>
+
+    <h3 id="db-sync">db sync</h3>
+    <p>Sync data from the Zalo server into the local database.</p>
+
+    <table class="cmd-table">
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>db sync</code></td><td>Sync all (groups + friends + chats)</td></tr>
+        <tr><td><code>db sync all</code></td><td>Explicit full sync (same as above)</td></tr>
+        <tr><td><code>db sync groups</code></td><td>Sync group directory, members, and full history</td></tr>
+        <tr><td><code>db sync friends</code></td><td>Sync friend directory only</td></tr>
+        <tr><td><code>db sync chats</code></td><td>Sync discoverable DM/chat windows</td></tr>
+        <tr><td><code>db sync group &lt;groupId&gt;</code></td><td>Sync one group with full history</td></tr>
+        <tr><td><code>db sync chat &lt;chatId&gt;</code></td><td>Sync one chat</td></tr>
+      </tbody>
+    </table>
+
+    <h3>db sync options</h3>
+    <div class="opt-list">
+      <div class="opt-item">
+        <span class="opt-flag">-n, --count &lt;count&gt;</span>
+        <span class="opt-desc">Max messages to sync per chat <span class="badge-default">200</span></span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">-j, --json</span>
+        <span class="opt-desc">Output as JSON</span>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header"><span>Examples</span></div>
+      <div class="code-body"><span class="comment"># Enable and sync everything</span>
+<span class="prompt">$</span> openzca db enable
+<span class="prompt">$</span> openzca db sync
+
+<span class="comment"># Query last 7 days of group messages</span>
+<span class="prompt">$</span> openzca db group messages GID <span class="flag">--since</span> 7d
+
+<span class="comment"># Export DM history as JSON</span>
+<span class="prompt">$</span> openzca db friend messages 123456 <span class="flag">--all -j</span> &gt; chat.json
+
+<span class="comment"># Look up a specific message</span>
+<span class="prompt">$</span> openzca db message get MSG_ID <span class="flag">-j</span></div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- LISTEN                               -->
+    <!-- ════════════════════════════════════ -->
+
+    <h2 id="listen"><span class="cmd-prefix">listen</span> &mdash; Real-time message listener</h2>
+    <p>WebSocket-powered listener for incoming messages with webhook forwarding, media caching, and supervised mode.</p>
+
+    <div class="opt-list">
+      <div class="opt-item">
+        <span class="opt-flag">-e, --echo</span>
+        <span class="opt-desc">Auto-reply with the received message</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">-p, --prefix &lt;prefix&gt;</span>
+        <span class="opt-desc">Only process messages matching this prefix</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">-w, --webhook &lt;url&gt;</span>
+        <span class="opt-desc">POST each message payload to a webhook URL</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">-r, --raw</span>
+        <span class="opt-desc">Output raw JSON per line (for piping)</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--db / --no-db</span>
+        <span class="opt-desc">Force enable or disable DB writes for this session</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">-k, --keep-alive</span>
+        <span class="opt-desc">Auto-reconnect on disconnect</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--supervised</span>
+        <span class="opt-desc">Supervisor mode with lifecycle JSON events (connected, heartbeat, error, closed)</span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--heartbeat-ms &lt;ms&gt;</span>
+        <span class="opt-desc">Lifecycle heartbeat interval <span class="badge-default">30000</span></span>
+      </div>
+      <div class="opt-item">
+        <span class="opt-flag">--recycle-ms &lt;ms&gt;</span>
+        <span class="opt-desc">Force recycle listener after N ms (exits with code 75)</span>
+      </div>
+    </div>
+
+    <div class="callout callout-info">
+      <strong>Raw output fields:</strong> <code>threadId</code>, <code>msgId</code>, <code>cliMsgId</code>, <code>content</code>, <code>type</code>, <code>timestamp</code>, <code>senderId</code>, <code>senderName</code>, <code>chatType</code>, <code>mentions</code>, <code>mediaPath</code>, <code>mediaUrl</code>, <code>quote</code>, and more. See <code>--raw</code> output for full schema.
+    </div>
+
+    <div class="code-block">
+      <div class="code-header"><span>Examples</span></div>
+      <div class="code-body"><span class="comment"># Listen with webhook and auto-reconnect</span>
+<span class="prompt">$</span> openzca listen <span class="flag">--webhook</span> http://localhost:3000/hook <span class="flag">-k</span>
+
+<span class="comment"># Supervised mode for process managers</span>
+<span class="prompt">$</span> openzca listen <span class="flag">--supervised --keep-alive --recycle-ms</span> 1800000
+
+<span class="comment"># Pipe raw JSON to jq</span>
+<span class="prompt">$</span> openzca listen <span class="flag">--raw</span> | jq <span class="string">'.content'</span>
+
+<span class="comment"># Only listen for messages starting with "!"</span>
+<span class="prompt">$</span> openzca listen <span class="flag">--prefix</span> <span class="string">"!"</span> <span class="flag">--webhook</span> http://localhost:3000/bot</div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- TEXT FORMATTING                      -->
+    <!-- ════════════════════════════════════ -->
+
+    <h2 id="text-formatting">Text Formatting</h2>
+    <p>When sending messages with <code>msg send</code>, openzca parses Markdown-style syntax into Zalo text styles. Use <code>--raw</code> to skip formatting.</p>
+
+    <table class="fmt-table">
+      <thead><tr><th>Syntax</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td>**bold**</td><td>Bold text</td></tr>
+        <tr><td>__bold__</td><td>Bold text (alternative)</td></tr>
+        <tr><td>*italic*</td><td>Italic text</td></tr>
+        <tr><td>_italic_</td><td>Italic text (alternative)</td></tr>
+        <tr><td>***bold italic***</td><td>Bold + italic</td></tr>
+        <tr><td>~~strikethrough~~</td><td>Strikethrough text</td></tr>
+        <tr><td># Heading</td><td>Large bold heading (H1)</td></tr>
+        <tr><td>## Heading</td><td>Bold heading (H2)</td></tr>
+        <tr><td>### Heading</td><td>Heading (H3)</td></tr>
+        <tr><td>#### Heading</td><td>Heading (H4)</td></tr>
+        <tr><td>- item</td><td>Unordered list (also * and +)</td></tr>
+        <tr><td>1. item</td><td>Ordered list</td></tr>
+        <tr><td>> quote</td><td>Blockquote (indented)</td></tr>
+        <tr><td>```code```</td><td>Fenced code block</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Color &amp; size tags</h3>
+    <p>Plain-text color and size tags for additional styling:</p>
+    <table class="fmt-table">
+      <thead><tr><th>Syntax</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td>{red}text{/red}</td><td>Red colored text</td></tr>
+        <tr><td>{orange}text{/orange}</td><td>Orange colored text</td></tr>
+        <tr><td>{yellow}text{/yellow}</td><td>Yellow colored text</td></tr>
+        <tr><td>{green}text{/green}</td><td>Green colored text</td></tr>
+        <tr><td>{big}text{/big}</td><td>Large text</td></tr>
+        <tr><td>{small}text{/small}</td><td>Small text</td></tr>
+        <tr><td>{underline}text{/underline}</td><td>Underlined text</td></tr>
+      </tbody>
+    </table>
+
+    <h3>@Mentions in groups</h3>
+    <p>When sending to a group (<code>-g</code>), <code>@Name</code> or <code>@userId</code> resolves against the group member list. Matching works against user IDs, display names, and Zalo names. Mentions work inside styled text (e.g., <code>**@Alice**</code>).</p>
+    <div class="callout callout-warn">
+      <strong>Ambiguous matches will fail.</strong> If multiple members match a partial name, the command will error. Use a more specific name or the full user ID.
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- ENVIRONMENT VARIABLES                -->
+    <!-- ════════════════════════════════════ -->
+
+    <h2 id="env-vars">Environment Variables</h2>
+    <p>Override defaults with environment variables. All are optional.</p>
+
+    <table class="env-table">
+      <thead><tr><th>Variable</th><th>Default</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="env-group-header"><td colspan="3">Profile &amp; Data</td></tr>
+        <tr><td>OPENZCA_HOME</td><td>~/.openzca</td><td>Override default data directory</td></tr>
+        <tr><td>OPENZCA_PROFILE</td><td></td><td>Select active profile (without --profile flag)</td></tr>
+        <tr><td>ZCA_PROFILE</td><td></td><td>Legacy profile alias</td></tr>
+
+        <tr class="env-group-header"><td colspan="3">Debug</td></tr>
+        <tr><td>OPENZCA_DEBUG</td><td>0</td><td>Enable debug logging (1 to enable)</td></tr>
+        <tr><td>OPENZCA_DEBUG_FILE</td><td>~/.openzca/logs/openzca-debug.log</td><td>Debug log file path</td></tr>
+
+        <tr class="env-group-header"><td colspan="3">QR Code Rendering</td></tr>
+        <tr><td>OPENZCA_QR_OPEN</td><td>0</td><td>Auto-open QR image (1 to enable)</td></tr>
+        <tr><td>OPENZCA_QR_AUTO_OPEN</td><td>1 (non-interactive)</td><td>Auto-open in headless mode (0 to disable)</td></tr>
+        <tr><td>OPENZCA_QR_RENDER</td><td>auto</td><td>Force QR mode: kitty, iterm, ascii, auto</td></tr>
+        <tr><td>OPENZCA_QR_ASCII</td><td>1</td><td>ASCII QR fallback (0 to disable)</td></tr>
+        <tr><td>OPENZCA_QR_DISABLE_ITERM_INLINE</td><td>0</td><td>Disable iTerm2 inline QR (1 to force ASCII)</td></tr>
+        <tr><td>OPENZCA_QR_WIDTH</td><td>34</td><td>iTerm2 QR width in cells (16-80)</td></tr>
+
+        <tr class="env-group-header"><td colspan="3">Listener</td></tr>
+        <tr><td>OPENZCA_LISTEN_MEDIA_DIR</td><td></td><td>Explicit inbound media cache directory</td></tr>
+        <tr><td>OPENZCA_LISTEN_MEDIA_MAX_BYTES</td><td>20971520</td><td>Max bytes per inbound media file (20 MB)</td></tr>
+        <tr><td>OPENZCA_LISTEN_MEDIA_MAX_FILES</td><td>4</td><td>Max inbound media files per message (max 16)</td></tr>
+        <tr><td>OPENZCA_LISTEN_MEDIA_FETCH_TIMEOUT_MS</td><td>10000</td><td>Max download time per media URL</td></tr>
+        <tr><td>OPENZCA_LISTEN_RECYCLE_MS</td><td>1800000</td><td>Force listener recycle after N ms (0 to disable)</td></tr>
+        <tr><td>OPENZCA_LISTEN_HEARTBEAT_MS</td><td>30000</td><td>Heartbeat interval for supervised mode</td></tr>
+        <tr><td>OPENZCA_LISTEN_INCLUDE_QUOTE_CONTEXT</td><td>1</td><td>Include reply context in content</td></tr>
+        <tr><td>OPENZCA_LISTEN_DOWNLOAD_QUOTE_MEDIA</td><td>1</td><td>Download quoted attachment URLs</td></tr>
+        <tr><td>OPENZCA_LISTEN_ENFORCE_SINGLE_OWNER</td><td>1</td><td>Enforce one listener per profile</td></tr>
+        <tr><td>OPENZCA_LISTEN_IPC</td><td>1</td><td>Expose IPC socket from listener</td></tr>
+        <tr><td>OPENZCA_LISTEN_KEEPALIVE_RESTART_DELAY_MS</td><td>2000</td><td>Restart delay after close</td></tr>
+
+        <tr class="env-group-header"><td colspan="3">Upload &amp; IPC</td></tr>
+        <tr><td>OPENZCA_UPLOAD_IPC</td><td>1</td><td>Try upload via listener IPC first</td></tr>
+        <tr><td>OPENZCA_UPLOAD_IPC_CONNECT_TIMEOUT_MS</td><td>1000</td><td>IPC connect timeout</td></tr>
+        <tr><td>OPENZCA_UPLOAD_IPC_TIMEOUT_MS</td><td>upload + 5000</td><td>IPC response timeout</td></tr>
+        <tr><td>OPENZCA_UPLOAD_TIMEOUT_MS</td><td>120000</td><td>File upload timeout</td></tr>
+        <tr><td>OPENZCA_UPLOAD_ENFORCE_SINGLE_OWNER</td><td>1</td><td>Fail if listener owner exists but IPC unavailable</td></tr>
+        <tr><td>OPENZCA_UPLOAD_AUTO_THREAD_TYPE</td><td>0</td><td>Auto-detect thread type for uploads</td></tr>
+
+        <tr class="env-group-header"><td colspan="3">Message History</td></tr>
+        <tr><td>OPENZCA_RECENT_USER_MAX_PAGES</td><td>20</td><td>Max websocket pages for DM recent</td></tr>
+        <tr><td>OPENZCA_RECENT_GROUP_MAX_PAGES</td><td>20</td><td>Max websocket pages for group recent</td></tr>
+
+        <tr class="env-group-header"><td colspan="3">System</td></tr>
+        <tr><td>OPENZCA_SIGNAL_FORCE_EXIT_MS</td><td>1500</td><td>Force exit after signal timeout</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Data storage paths</h3>
+    <div class="code-block">
+      <div class="code-header"><span>File structure</span></div>
+      <div class="code-body"><span class="comment"># Default data directory (override with OPENZCA_HOME)</span>
+~/.openzca/
+  profiles.json                              <span class="comment"># Profile registry</span>
+  logs/openzca-debug.log                     <span class="comment"># Debug log</span>
+  profiles/&lt;name&gt;/
+    credentials.json                         <span class="comment"># Auth credentials</span>
+    cache/
+      friends.json                           <span class="comment"># Friends cache</span>
+      groups.json                            <span class="comment"># Groups cache</span>
+      meta.json                              <span class="comment"># Cache metadata</span>
+    db.json                                  <span class="comment"># DB config</span>
+    messages.sqlite                          <span class="comment"># SQLite database</span>
+    listener-owner.json                      <span class="comment"># Listener lock file</span>
+    listen.sock                              <span class="comment"># IPC socket</span></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ═══ Mobile sidebar toggle ═══ -->
+<button class="sidebar-mobile-toggle" id="sidebarToggle" aria-label="Toggle navigation">
+  &#9776;
+</button>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand"><span>&gt;_</span> openzca</div>
+      <p class="footer-note">Free, open-source Zalo CLI for educational and personal research purposes. Not affiliated with Zalo or VNG Corporation.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="https://github.com/darkamenosa/openzca" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.npmjs.com/package/openzca" target="_blank" rel="noopener">npm</a>
+      <a href="https://github.com/darkamenosa/openzca/issues" target="_blank" rel="noopener">Report Issues</a>
+    </div>
+    <div class="footer-col">
+      <h4>Community</h4>
+      <a href="https://github.com/darkamenosa/openzca/issues" target="_blank" rel="noopener">Issues</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="/terms.html">Terms of Service</a>
+      <a href="/privacy.html">Privacy Policy</a>
+    </div>
+    <div class="footer-col">
+      <h4>Built With</h4>
+      <a href="https://github.com/RFS-ADRENO/zca-js" target="_blank" rel="noopener">zca-js</a>
+      <a href="https://nodejs.org" target="_blank" rel="noopener">Node.js</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-bottom-row">
+      <span>&copy; 2026 openzca &middot; MIT License</span>
+      <span>openzca.com</span>
+    </div>
+    <p class="footer-legal">"Zalo" is a registered trademark of VNG Corporation. openzca is an independent open-source project and is not affiliated with, endorsed by, or associated with Zalo or VNG Corporation. This tool is provided for educational and personal research purposes only. Users are solely responsible for their use of this software and compliance with applicable terms of service and laws.</p>
+  </div>
+</footer>
+
+<script>
+/* ── Mobile nav toggle ── */
+document.getElementById('mobileToggle').addEventListener('click', function() {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+/* ── Mobile sidebar toggle ── */
+var sidebarToggle = document.getElementById('sidebarToggle');
+var sidebar = document.getElementById('sidebar');
+var overlay = document.getElementById('sidebarOverlay');
+
+function closeSidebar() {
+  sidebar.classList.remove('open');
+  overlay.classList.remove('open');
+}
+
+sidebarToggle.addEventListener('click', function() {
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('open');
+});
+overlay.addEventListener('click', closeSidebar);
+
+/* Close sidebar on link click (mobile) */
+sidebar.querySelectorAll('.sidebar-link').forEach(function(link) {
+  link.addEventListener('click', function() {
+    if (window.innerWidth <= 900) closeSidebar();
+  });
+});
+
+/* ── Copy buttons ── */
+document.querySelectorAll('.copy-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    navigator.clipboard.writeText(btn.dataset.copy).then(function() {
+      var orig = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(function() { btn.textContent = orig; }, 1500);
+    });
+  });
+});
+
+/* ── Scroll spy ── */
+var sidebarLinks = document.querySelectorAll('.sidebar-link');
+var sections = [];
+sidebarLinks.forEach(function(link) {
+  var id = link.getAttribute('href').replace('#', '');
+  var el = document.getElementById(id);
+  if (el) sections.push({ id: id, el: el, link: link });
+});
+
+function updateScrollSpy() {
+  var scrollPos = window.scrollY + 100;
+  var current = sections[0];
+  for (var i = 0; i < sections.length; i++) {
+    if (sections[i].el.offsetTop <= scrollPos) current = sections[i];
+  }
+  sidebarLinks.forEach(function(l) { l.classList.remove('active'); });
+  if (current) current.link.classList.add('active');
+}
+
+window.addEventListener('scroll', updateScrollSpy, { passive: true });
+updateScrollSpy();
+</script>
+
+</body>
+</html>
