@@ -43,7 +43,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 24px); }
+    html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 24px); overflow-x: hidden; }
     body {
       font-family: var(--font);
       background: var(--bg);
@@ -51,6 +51,7 @@
       line-height: 1.6;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
     /* ── NAV ── */
@@ -143,7 +144,9 @@
     .docs-main {
       flex: 1;
       min-width: 0;
+      max-width: 100%;
       padding: 40px 48px 80px;
+      overflow-x: hidden;
     }
 
     .docs-main h1 {
@@ -193,6 +196,7 @@
     .code-block {
       background: #0b1120; border: 1px solid var(--border);
       border-radius: 10px; overflow: hidden; margin-bottom: 20px;
+      max-width: 100%;
     }
     .code-header {
       background: #1a1f2e; padding: 8px 16px;
@@ -219,7 +223,7 @@
     /* ── COMMAND TABLE ── */
     .table-wrap {
       border: 1px solid var(--border); border-radius: 10px;
-      overflow: hidden; margin-bottom: 24px;
+      overflow-x: auto; margin-bottom: 24px; max-width: 100%;
     }
     .cmd-table {
       width: 100%; border-collapse: collapse;
